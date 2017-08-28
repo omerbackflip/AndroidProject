@@ -18,6 +18,8 @@ import com.example.shemeshda.finalproject.model.ModelFirebaseUser;
 import com.example.shemeshda.finalproject.model.ModelRowView;
 import com.example.shemeshda.finalproject.model.ModelUser;
 
+import java.util.regex.Pattern;
+
 
 /**
  * Created by shemeshda on 20/08/2017.
@@ -71,16 +73,36 @@ public class loginFrag extends Fragment{
         Button login= (Button)view.findViewById(R.id.loginbtn);
         Button reg= (Button)view.findViewById(R.id.loginreg);
 
-       if(ModelUser.instace.isSignIn()) {
+
+        if(ModelUser.instace.isSignIn()) {
            mListener.onFragmentInteraction(1);
 
        }
       else {
-           login.setOnClickListener(new View.OnClickListener() {
+                 login.setOnClickListener(new View.OnClickListener() {
                @Override
                public void onClick(View v) {
-                   String user = username.getText().toString();
-                   String pas = pass.getText().toString();
+
+                   final String user = username.getText().toString();
+                   final  String pas = pass.getText().toString();
+                   if(!pas.isEmpty())
+                {
+                  if(!android.util.Patterns.EMAIL_ADDRESS.matcher(user).matches())
+                  {
+
+                      AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                      builder.setMessage("Invalid Email").setTitle("Failed");
+                      AlertDialog dialog = builder.create();
+                      dialog.show();
+                  }
+                   Pattern PASSWORD_PATTERN = Pattern.compile("[a-zA-Z0-9]{6,12}");
+                   if(!PASSWORD_PATTERN.matcher(pas).matches())
+                   {
+                       AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                       builder.setMessage("Password Must contain at least 6 charcters,\nletters and degets only!").setTitle("Failed");
+                       AlertDialog dialog = builder.create();
+                       dialog.show();
+                   }
 
                    ModelUser.instace.loginUser(user,pas, getActivity(), new ModelUser.loginUserCallBack() {
                        @Override
@@ -99,7 +121,15 @@ public class loginFrag extends Fragment{
                    });
 
                }
-           });
+               else {
+                       AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                       builder.setMessage("Password Must contain at least 6 charcters,\nletters and degets only!").setTitle("Failed");
+                       AlertDialog dialog = builder.create();
+                       dialog.show();
+                       mListener.onFragmentInteraction(0);
+                   }
+           }
+                 });
 
            reg.setOnClickListener(new View.OnClickListener() {
                @Override

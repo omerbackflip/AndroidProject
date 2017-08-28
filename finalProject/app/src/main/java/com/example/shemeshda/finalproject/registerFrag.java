@@ -14,6 +14,8 @@ import android.widget.EditText;
 
 import com.example.shemeshda.finalproject.model.ModelUser;
 
+import java.util.regex.Pattern;
+
 /**
  * Created by shemeshda on 20/08/2017.
  */
@@ -71,26 +73,61 @@ public class registerFrag extends Fragment {
             public void onClick(View v) {
 
 
-                String user=username.getText().toString();
-                String pas=pass.getText().toString();
-                ModelUser.instace.regUser(user,pas,getActivity(), new ModelUser.regUserCallBack() {
-                    @Override
-                    public void onReg(boolean t) {
-                        if(t)
-                        {
-                            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                            builder.setMessage("Register Succefully").setTitle("Success");
-                            AlertDialog dialog = builder.create();
-                            dialog.show();
-                            mListener.onFragmentInteraction(1);
-                        }
-                        else
-                        {
-                            mListener.onFragmentInteraction(2);
-                        }
-                    }
-                });
+                String user = username.getText().toString();
+                String pas = pass.getText().toString();
+                boolean a=pas.isEmpty();
+                Pattern PASSWORD_PATTERN = Pattern.compile("[a-zA-Z0-9]{6,12}");
+                boolean b=PASSWORD_PATTERN.matcher(pas).matches();
+                if (!a) {
+                    if (!android.util.Patterns.EMAIL_ADDRESS.matcher(user).matches()) {
 
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                        builder.setMessage("Invalid Email").setTitle("Failed");
+                        AlertDialog dialog = builder.create();
+                        dialog.show();
+                    }
+
+
+
+                    if (!b) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                        builder.setMessage("Password Must contain at least 6 charcters,\nletters and degets only!").setTitle("Failed");
+                        AlertDialog dialog = builder.create();
+                        dialog.show();
+                    }
+                    if(!a && b)
+                    {
+                        ModelUser.instace.regUser(user, pas, getActivity(), new ModelUser.regUserCallBack() {
+                                    @Override
+                                    public void onReg(boolean t) {
+                                        if (t) {
+                                            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                                            builder.setMessage("Register Succefully").setTitle("Success");
+                                            AlertDialog dialog = builder.create();
+                                            dialog.show();
+                                            mListener.onFragmentInteraction(1);
+                                        } else {
+                                            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                                            builder.setMessage("Email Already Exist").setTitle("Failed");
+                                            AlertDialog dialog = builder.create();
+                                            dialog.show();
+                                            mListener.onFragmentInteraction(2);
+                                        }
+                                    }
+                                }
+                        );
+
+                    }
+
+                }
+                else
+                {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    builder.setMessage("Password Must contain at least 6 charcters,\nletters and degets only!").setTitle("Failed");
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                    mListener.onFragmentInteraction(2);
+                }
             }
 
 
