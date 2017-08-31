@@ -4,16 +4,20 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 
 import com.example.shemeshda.finalproject.model.ModelUser;
 
-public class MainActivity extends Activity implements listFragment.OnFragmentInteractionListener, loginFrag.OnFragmentInteractionListener,addPost.OnFragmentInteractionListener {
+public class MainActivity extends Activity implements listFragment.OnFragmentInteractionListener, loginFrag.OnFragmentInteractionListener {
     private static Context context;
     FragmentTransaction tran = getFragmentManager().beginTransaction();
-    String username;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,10 +62,8 @@ public class MainActivity extends Activity implements listFragment.OnFragmentInt
                 break;
             }
             case 3: {
-                addPost list = addPost.newInstance();
-                tran = getFragmentManager().beginTransaction();
-                tran.replace(R.id.main_container, list);
-                tran.commit();
+                Intent myIntent = new Intent(this, AddPostActivity.class);
+                startActivity(myIntent);
                 break;
             }
             case 4: {
@@ -81,7 +83,8 @@ public class MainActivity extends Activity implements listFragment.OnFragmentInt
         int itemId = item.getItemId();
         switch (itemId){
             case R.id.main_add: {
-                onFragmentInteraction(3);
+                Intent myIntent = new Intent(this, AddPostActivity.class);
+                startActivity(myIntent);
                 break;
             }
             case R.id.main_logout: {
