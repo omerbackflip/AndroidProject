@@ -11,10 +11,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 
 import com.example.shemeshda.finalproject.model.ModelUser;
 
 import java.util.regex.Pattern;
+
+import static android.view.View.GONE;
 
 /**
  * Created by shemeshda on 20/08/2017.
@@ -59,7 +62,8 @@ public class registerFrag extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         setHasOptionsMenu(true);
         View view =inflater.inflate(R.layout.fragment_regiser, container, false);
-
+        final ProgressBar progressBar= (ProgressBar) view.findViewById(R.id.regtPB);
+        progressBar.setVisibility(GONE);
 
        final EditText username= (EditText)view.findViewById(R.id.userreg);
         final EditText pass= (EditText) view.findViewById(R.id.passreg);
@@ -72,7 +76,7 @@ public class registerFrag extends Fragment {
             @Override
             public void onClick(View v) {
 
-
+                progressBar.setVisibility(View.VISIBLE);
                 String user = username.getText().toString();
                 String pas = pass.getText().toString();
                 boolean a=pas.isEmpty();
@@ -80,7 +84,7 @@ public class registerFrag extends Fragment {
                 boolean b=PASSWORD_PATTERN.matcher(pas).matches();
                 if (!a) {
                     if (!android.util.Patterns.EMAIL_ADDRESS.matcher(user).matches()) {
-
+                        progressBar.setVisibility(GONE);
                         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                         builder.setMessage("Invalid Email").setTitle("Failed");
                         AlertDialog dialog = builder.create();
@@ -90,6 +94,7 @@ public class registerFrag extends Fragment {
 
 
                     if (!b) {
+                        progressBar.setVisibility(GONE);
                         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                         builder.setMessage("Password Must contain at least 6 charcters,\nletters and degets only!").setTitle("Failed");
                         AlertDialog dialog = builder.create();
@@ -100,6 +105,7 @@ public class registerFrag extends Fragment {
                         ModelUser.instace.regUser(user, pas, getActivity(), new ModelUser.regUserCallBack() {
                                     @Override
                                     public void onReg(boolean t) {
+                                        progressBar.setVisibility(GONE);
                                         if (t) {
                                             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                                             builder.setMessage("Register Succefully").setTitle("Success");

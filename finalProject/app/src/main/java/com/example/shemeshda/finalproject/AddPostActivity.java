@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.shemeshda.finalproject.model.ModelRowView;
@@ -23,11 +24,14 @@ import com.example.shemeshda.finalproject.model.RowVew;
 
 import java.util.Random;
 
+import static android.view.View.GONE;
+
 public class AddPostActivity extends Activity {
 
     // private static String username ;
     private static final String ID = "id";
     Bitmap imageBitmap;
+    ProgressBar progressBar;
     static final int REQUEST_IMAGE_CAPTURE = 1;
     final static int RESAULT_SUCCESS = 0;
     final static int RESAULT_FAIL = 1;
@@ -49,7 +53,8 @@ public class AddPostActivity extends Activity {
         Button post= (Button)findViewById(R.id.addpost);
         Button cancel= (Button)findViewById(R.id.cancelpost);
         ImageButton image=(ImageButton)findViewById(R.id.postimage);
-
+        progressBar = (ProgressBar) findViewById(R.id.addpostPB);
+        progressBar.setVisibility(GONE);
         image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -61,9 +66,12 @@ public class AddPostActivity extends Activity {
         {
             @Override
             public void onClick(View v) {
+                progressBar.setVisibility(View.VISIBLE);
                 final RowVew rw = new RowVew();
                 rw.text=text.getText().toString();
                 rw.user= ModelUser.instace.getUsername();
+                 final Intent myIntent = new Intent(v.getContext(), MainActivity.class);
+                final Context context=v.getContext();
                 rw.imageUrl="";
 
                 Random rand=new Random();
@@ -85,6 +93,8 @@ public class AddPostActivity extends Activity {
                             rw.imageUrl = url;
                             ModelRowView.instace.addRow(rw);
                             setResult(RESAULT_SUCCESS);
+                            startActivity(myIntent);
+                            progressBar.setVisibility(GONE);
                             finish();
                         }
 
@@ -96,12 +106,13 @@ public class AddPostActivity extends Activity {
                 }else{
                     ModelRowView.instace.addRow(rw);
                     setResult(RESAULT_SUCCESS);
+                    startActivity(myIntent);
+                    progressBar.setVisibility(GONE);
                     finish();
                 }
 
 
-                Intent myIntent = new Intent(v.getContext(), MainActivity.class);
-                startActivity(myIntent);
+
             }
         });
 
@@ -110,6 +121,7 @@ public class AddPostActivity extends Activity {
             public void onClick(View v) {
                 Intent myIntent = new Intent(v.getContext(), MainActivity.class);
                 startActivity(myIntent);
+                finish();
             }
         });
 

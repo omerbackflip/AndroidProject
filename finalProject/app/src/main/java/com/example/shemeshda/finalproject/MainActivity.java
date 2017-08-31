@@ -64,6 +64,7 @@ public class MainActivity extends Activity implements listFragment.OnFragmentInt
             case 3: {
                 Intent myIntent = new Intent(this, AddPostActivity.class);
                 startActivity(myIntent);
+                finish();
                 break;
             }
             case 4: {
@@ -85,6 +86,7 @@ public class MainActivity extends Activity implements listFragment.OnFragmentInt
             case R.id.main_add: {
                 Intent myIntent = new Intent(this, AddPostActivity.class);
                 startActivity(myIntent);
+                finish();
                 break;
             }
             case R.id.main_logout: {

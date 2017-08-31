@@ -2,7 +2,10 @@ package com.example.shemeshda.finalproject;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v4.content.res.ResourcesCompat;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,9 +18,11 @@ import android.widget.ImageView;
 import android.widget.ListView;
 
 
+
 import java.util.List;
 
 import android.app.Fragment;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -160,12 +165,34 @@ public class listFragment extends Fragment {
             }
             TextView text  = (TextView) convertView.findViewById(R.id.textImage);
             TextView user  = (TextView) convertView.findViewById(R.id.imageuser);
-            ImageView image = (ImageView) convertView.findViewById(R.id.rowImage);
-
-            RowVew rv = data.get(position);
+            final ImageView imageView = (ImageView) convertView.findViewById(R.id.rowImage);
+            final ProgressBar progressBar = (ProgressBar) convertView.findViewById(R.id.getImagrPB);
+           final RowVew rv = data.get(position);
             text.setText(rv.text);
             user.setText(rv.user);
+            Drawable drawable = ResourcesCompat.getDrawable(getResources(), R.drawable.avatar, null);
+            imageView.setImageDrawable(drawable);
 
+            imageView.setTag(rv.imageUrl);
+
+            if (rv.imageUrl != null && !rv.imageUrl.isEmpty() && !rv.imageUrl.equals("")){
+                progressBar.setVisibility(View.VISIBLE);
+                ModelRowView.instace.getImage(rv.imageUrl, new ModelRowView.GetImageListener() {
+                    @Override
+                    public void onSuccess(Bitmap image) {
+                        String tagUrl = imageView.getTag().toString();
+                        if (tagUrl.equals(rv.imageUrl)) {
+                            imageView.setImageBitmap(image);
+                            progressBar.setVisibility(View.GONE);
+                        }
+                    }
+
+                    @Override
+                    public void onFail() {
+
+                    }
+                });
+            }
             return convertView;
         }
     }

@@ -11,14 +11,18 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 
 import com.example.shemeshda.finalproject.model.ModelFirebaseUser;
 import com.example.shemeshda.finalproject.model.ModelRowView;
 import com.example.shemeshda.finalproject.model.ModelUser;
 
 import java.util.regex.Pattern;
+
+import static android.view.View.GONE;
 
 
 /**
@@ -63,8 +67,9 @@ public class loginFrag extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         setHasOptionsMenu(true);
-        View view =inflater.inflate(R.layout.fragment_login, container, false);
-
+        final View view =inflater.inflate(R.layout.fragment_login, container, false);
+       final ProgressBar progressBar= (ProgressBar) view.findViewById(R.id.loginPB);
+        progressBar.setVisibility(GONE);
 
 
        final EditText username= (EditText)view.findViewById(R.id.userlogin);
@@ -83,13 +88,14 @@ public class loginFrag extends Fragment{
                @Override
                public void onClick(View v) {
 
+                   progressBar.setVisibility(View.VISIBLE);
                    final String user = username.getText().toString();
                    final  String pas = pass.getText().toString();
                    if(!pas.isEmpty())
                 {
                   if(!android.util.Patterns.EMAIL_ADDRESS.matcher(user).matches())
                   {
-
+                      progressBar.setVisibility(GONE);
                       AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                       builder.setMessage("Invalid Email").setTitle("Failed");
                       AlertDialog dialog = builder.create();
@@ -98,6 +104,7 @@ public class loginFrag extends Fragment{
                    Pattern PASSWORD_PATTERN = Pattern.compile("[a-zA-Z0-9]{6,12}");
                    if(!PASSWORD_PATTERN.matcher(pas).matches())
                    {
+                       progressBar.setVisibility(GONE);
                        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                        builder.setMessage("Password Must contain at least 6 charcters,\nletters and degets only!").setTitle("Failed");
                        AlertDialog dialog = builder.create();
@@ -107,6 +114,7 @@ public class loginFrag extends Fragment{
                    ModelUser.instace.loginUser(user,pas, getActivity(), new ModelUser.loginUserCallBack() {
                        @Override
                        public void onLogin(boolean t) {
+                           progressBar.setVisibility(GONE);
                            if (t) {
 
                                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -122,6 +130,7 @@ public class loginFrag extends Fragment{
 
                }
                else {
+                       progressBar.setVisibility(GONE);
                        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                        builder.setMessage("Password Must contain at least 6 charcters,\nletters and degets only!").setTitle("Failed");
                        AlertDialog dialog = builder.create();
