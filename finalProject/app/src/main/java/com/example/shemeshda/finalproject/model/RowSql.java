@@ -23,7 +23,7 @@ public class RowSql {
     static final String POST_DELTE ="isDeleted";
     static final String LAST_UPDATE_DATE="lastupdate";
 
-    static List<RowVew> getAllRows(SQLiteDatabase db) {
+    public static List<RowVew> getAllRows(SQLiteDatabase db) {
         Cursor cursor = db.query(POSTS_TABLE, null, null, null, null, null, null);
         List<RowVew> list = new LinkedList<RowVew>();
         if (cursor.moveToFirst()) {
@@ -50,15 +50,40 @@ public class RowSql {
         }
         return list;
     }
+    public static int getRowID(SQLiteDatabase db, String id) {
+        int id3=0;
+        String table = POSTS_TABLE;
+        String[] columns = {"id"};
+        String selection = "id =?";
+        String[] selectionArgs = {String.valueOf(id)};
+        String groupBy = null;
+        String having = null;
+        String orderBy = null;
+        String limit = null;
 
-    static void addRow(SQLiteDatabase db, RowVew r)
+        Cursor cursor = db.query(table, columns, selection, selectionArgs, groupBy, having, orderBy, limit);
+
+            int id2 = cursor.getColumnIndex(POSTS_ID);
+
+        if(cursor.moveToFirst())
+            id3 = cursor.getInt(id2);
+
+        return id3;
+    }
+
+    public static void addRow(SQLiteDatabase db, RowVew r)
     {
         Log.d("tag","second update");
         ContentValues values = new ContentValues();
         values.put(POSTS_USER, r.user);
         values.put(POSTS_TEXT, r.text);
         values.put(POSTS_ID, r.id);
-        values.put(POST_DELTE, 0);
+
+        if(r.isDeleted)
+            values.put(POST_DELTE, 1);
+        else
+            values.put(POST_DELTE, 0);
+
         values.put(POSTS_IMAGE, r.imageUrl);
         values.put(LAST_UPDATE_DATE,r.lastUpdateDate);
         db.insert(POSTS_TABLE, POSTS_ID, values);
@@ -78,14 +103,13 @@ public class RowSql {
 
     }
 
-    static public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("drop table " + POSTS_TABLE + ";");
+    public static  void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        db.execSQL("drop table " + POSTS_TABLE );
         onCreate(db);
     }
 
-   static public boolean checkID(SQLiteDatabase db,int id)
+    public static  boolean checkID(SQLiteDatabase db,int id)
     {
-        ModelSql modelSql =new ModelSql(finalProject.getMyContext());
 
         String table = POSTS_TABLE;
         String[] columns = {"id"};
@@ -96,7 +120,7 @@ public class RowSql {
         String orderBy = null;
         String limit = null;
 
-        Cursor cursor = modelSql.getReadableDatabase().query(table, columns, selection, selectionArgs, groupBy, having, orderBy, limit);
+        Cursor cursor =db.query(table, columns, selection, selectionArgs, groupBy, having, orderBy, limit);
 
         if(cursor.getCount()==0)
             return true;
@@ -111,7 +135,12 @@ public class RowSql {
         values.put(POSTS_USER, r.user);
         values.put(POSTS_TEXT, r.text);
         values.put(POSTS_ID, r.id);
-        values.put(POST_DELTE, 0);
+
+        if(r.isDeleted)
+            values.put(POST_DELTE, 1);
+        else
+            values.put(POST_DELTE, 0);
+
         values.put(POSTS_IMAGE, r.imageUrl);
         values.put(LAST_UPDATE_DATE,r.lastUpdateDate);
         db.update(POSTS_TABLE,values,"id=?",new String[]{String.valueOf(r.id)});

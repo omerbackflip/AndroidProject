@@ -10,6 +10,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageButton;
@@ -61,6 +62,7 @@ public class MainActivity extends Activity implements listFragment.OnFragmentInt
                 break;
             }
             case 1: {
+                Log.d("gold","first check");
                 listFragment list = listFragment.newInstance();
                 tran = getFragmentManager().beginTransaction();
                 tran.replace(R.id.main_container, list);

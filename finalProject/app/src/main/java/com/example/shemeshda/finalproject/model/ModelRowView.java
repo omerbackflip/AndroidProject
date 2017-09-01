@@ -30,8 +30,11 @@ public class ModelRowView {
 
     public void deletePost(RowVew rw)
     {
-        modelFB.deletePost(rw);
-        modelSql.deletePost(modelSql.getWritableDatabase(),rw);
+        rw.isDeleted=true;
+        modelFB.addRow(rw);
+    }
+    public int getRowSql(RowVew rw){
+        return modelSql.getRow(modelSql.getReadableDatabase(),rw);
     }
 
     public interface SaveImageListener {
@@ -69,6 +72,7 @@ public class ModelRowView {
     }
 
     private void synchRowsDbAndregisterRowUpdates() {
+        Log.d("gold","synch first");
         //1. get local lastUpdateTade
         SharedPreferences pref = finalProject.getMyContext().getSharedPreferences("TAG", Context.MODE_PRIVATE);
         final double lastUpdateDate = pref.getFloat("RowLastUpdateDate",0);
@@ -77,9 +81,13 @@ public class ModelRowView {
         modelFB.postsUpdates(lastUpdateDate,new RegisterRowUpdatesCallback() {
             @Override
             public void onRowUpdate(RowVew r) {
-                //3. update the local db
-                Log.d("tag","check update");
-                RowSql.addRow(modelSql.getWritableDatabase(),r);
+                Log.d("gold","synch five");
+                //3. update the local db;
+                int i=getRowSql(r);
+                if(i > 0)
+                    RowSql.editRow(modelSql.getWritableDatabase(),r);
+                else
+                    RowSql.addRow(modelSql.getWritableDatabase(),r);
                 //4. update the lastUpdateTade
                 SharedPreferences pref = finalProject.getMyContext().getSharedPreferences("TAG", Context.MODE_PRIVATE);
                 final double lastUpdateDate = pref.getFloat("RowLastUpdateDate",0);

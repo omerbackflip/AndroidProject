@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.content.res.ResourcesCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -29,6 +30,7 @@ import com.example.shemeshda.finalproject.model.ModelRowView;
 import com.example.shemeshda.finalproject.model.ModelUser;
 import com.example.shemeshda.finalproject.model.RowVew;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -53,16 +55,21 @@ public class listFragment extends Fragment {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(ModelRowView.UpdatepostsEvent event) {
        boolean exist = false;
-       for (RowVew r: data){
-           if (r.id==event.rb.id){
-              exist = true;
+        adapter.notifyDataSetChanged();
+       for (int i=0;i<data.size();i++) {
+           if ((data.get(i).id == event.rb.id)) {
+               exist = true;
+               if ((!event.rb.isDeleted))
+                   data.set(i, event.rb);
+               else
+                   data.remove(i);
                break;
+
            }
-        }
-        if (!exist){
+       }
+        if (!exist&&(!event.rb.isDeleted)){
             data.add(event.rb);
         }
-        adapter.notifyDataSetChanged();
         list.setSelection(adapter.getCount() - 1);
         adapter.notifyDataSetChanged();
 
@@ -95,6 +102,7 @@ public class listFragment extends Fragment {
         View view=inflater.inflate(R.layout.fragment_image_list, container, false);
 
         data = ModelRowView.instace.getAllrows();
+        Log.d("gold",""+data.size());
 
         list = (ListView) view.findViewById(R.id.imagelist);
         adapter = new StudentsListAdapter();
@@ -123,6 +131,8 @@ public class listFragment extends Fragment {
 
     @Override
     public void onAttach(Activity context) {
+        EventBus.getDefault().register(this);
+
         super.onAttach(context);
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;

@@ -71,7 +71,7 @@ public class AddPostActivity extends Activity {
                 final RowVew rw = new RowVew();
                 rw.text=text.getText().toString();
                 rw.user= ModelUser.instace.getUsername();
-                 final Intent myIntent = new Intent(v.getContext(), MainActivity.class);
+                final Intent myIntent = new Intent(v.getContext(), MainActivity.class);
                 final Context context=v.getContext();
                 rw.imageUrl="";
 

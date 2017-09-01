@@ -12,6 +12,6 @@ public class RowVew
     public String text;
     public double lastUpdateDate;
     public int id;
-    boolean isDeleted;
+    public boolean isDeleted;
 
 }

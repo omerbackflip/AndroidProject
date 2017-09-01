@@ -59,19 +59,21 @@ public class EditRowActivity extends Activity {
         ModelRowView.instace.getRow(String.valueOf(s), new ModelRowView.GetRowCallback() {
             @Override
             public void onComplete(RowVew rv) {
-                rw=rv;
+                rw = rv;
                 text.setText(rw.text);
-                ModelRowView.instace.getImage(rw.imageUrl, new ModelRowView.GetImageListener() {
-                    @Override
-                    public void onSuccess(Bitmap image) {
-                        imageView.setImageBitmap(image);
-                    }
+                if (!rw.imageUrl.equals("")) {
+                    ModelRowView.instace.getImage(rw.imageUrl, new ModelRowView.GetImageListener() {
+                        @Override
+                        public void onSuccess(Bitmap image) {
+                            imageView.setImageBitmap(image);
+                        }
 
-                    @Override
-                    public void onFail() {
+                        @Override
+                        public void onFail() {
 
-                    }
-                });
+                        }
+                    });
+                }
             }
 
             @Override

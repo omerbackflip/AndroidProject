@@ -2,6 +2,7 @@ package com.example.shemeshda.finalproject.model;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.inputmethodservice.Keyboard;
 import android.net.Uri;
 import android.util.Log;
 
@@ -38,6 +39,7 @@ public class ModelFirebase {
         value.put("id", rv.id);
         value.put("text", rv.text);
         value.put("imageUrl", rv.imageUrl);
+        value.put("isDeleted",rv.isDeleted);
         value.put("lastUpdateDate", ServerValue.TIMESTAMP);
         myRef.child(String.valueOf(rv.id)).setValue(value);
     }
@@ -65,12 +67,13 @@ public class ModelFirebase {
     public void postsUpdates(final double lastUpdateDate, final ModelRowView.RegisterRowUpdatesCallback callback) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("rows");
+        Log.d("gold","synch second");
         myRef.orderByChild("lastUpdateDate").startAt(lastUpdateDate);
         ChildEventListener listener = myRef.orderByChild("lastUpdateDate").startAt(lastUpdateDate).addChildEventListener(new ChildEventListener() {
                     @Override
                     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                         Log.d("TAG","onChildAdded called");
-                        Log.d("tag","first update");
+                        Log.d("gold","synch third");
                         RowVew r = dataSnapshot.getValue(RowVew.class);
                         callback.onRowUpdate(r);
                     }
@@ -78,6 +81,7 @@ public class ModelFirebase {
                     @Override
                     public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                         RowVew r = dataSnapshot.getValue(RowVew.class);
+                        Log.d("gold","synch four");
                         Log.d("tag","checkkk update");
                         callback.onRowUpdate(r);
                     }
@@ -145,14 +149,7 @@ public class ModelFirebase {
             }
         });
     }
-    public void deletePost(RowVew rw) {
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("rows");
-        myRef.child(String.valueOf(rw.id)).removeValue();
 
-        FirebaseStorage storage =FirebaseStorage.getInstance();
-
-    }
 }
 
 
