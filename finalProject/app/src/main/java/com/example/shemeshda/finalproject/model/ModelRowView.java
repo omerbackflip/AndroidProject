@@ -2,7 +2,6 @@ package com.example.shemeshda.finalproject.model;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -10,7 +9,6 @@ import android.os.Environment;
 import android.util.Log;
 import android.webkit.URLUtil;
 
-import com.example.shemeshda.finalproject.MainActivity;
 import com.example.shemeshda.finalproject.finalProject;
 
 import org.greenrobot.eventbus.EventBus;
@@ -46,15 +44,18 @@ public class ModelRowView {
         void onFail();
     }
 
+    interface RegisterRowUpdatesCallback{
+        void onRowUpdate(RowVew r);
+    }
+
     private ModelRowView(){
         modelFB = new ModelFirebase();
         modelSql =new ModelSql(finalProject.getMyContext());
-        synchStudentsDbAndregisterStudentsUpdates();
+        synchRowsDbAndregisterRowUpdates();
     }
 
     public void addRow( RowVew r){
           modelFB.addRow(r);
-        modelSql.addRow(modelSql.getWritableDatabase(),r);
     }
 
     public void editRow( RowVew r){
@@ -67,13 +68,13 @@ public class ModelRowView {
         void onCancel();
     }
 
-    private void synchStudentsDbAndregisterStudentsUpdates() {
+    private void synchRowsDbAndregisterRowUpdates() {
         //1. get local lastUpdateTade
         SharedPreferences pref = finalProject.getMyContext().getSharedPreferences("TAG", Context.MODE_PRIVATE);
         final double lastUpdateDate = pref.getFloat("RowLastUpdateDate",0);
         Log.d("TAG","lastUpdateDate: " + lastUpdateDate);
 
-        modelFB.registerStudentsUpdates(lastUpdateDate,new ModelFirebase.RegisterRowUpdatesCallback() {
+        modelFB.postsUpdates(lastUpdateDate,new RegisterRowUpdatesCallback() {
             @Override
             public void onRowUpdate(RowVew r) {
                 //3. update the local db
@@ -91,7 +92,7 @@ public class ModelRowView {
                     Log.d("TAG","RowLastUpdateDate: " + r.lastUpdateDate);
                 }
 
-                EventBus.getDefault().post(new UpdateStudentEvent(r));
+                EventBus.getDefault().post(new UpdatepostsEvent(r));
             }
         });
     }
@@ -106,9 +107,9 @@ public class ModelRowView {
         return RowSql.getAllRows(modelSql.getReadableDatabase());
     }
 
-    public class UpdateStudentEvent {
+    public class UpdatepostsEvent {
         public final RowVew rb;
-        public UpdateStudentEvent(RowVew r) {
+        public UpdatepostsEvent(RowVew r) {
             this.rb = r;
         }
     }

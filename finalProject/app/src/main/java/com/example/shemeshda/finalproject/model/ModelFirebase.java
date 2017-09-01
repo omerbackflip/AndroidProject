@@ -62,13 +62,7 @@ public class ModelFirebase {
     }
 
 
-
-
-    interface RegisterRowUpdatesCallback{
-        void onRowUpdate(RowVew r);
-    }
-
-    public void registerStudentsUpdates(final double lastUpdateDate, final RegisterRowUpdatesCallback callback) {
+    public void postsUpdates(final double lastUpdateDate, final ModelRowView.RegisterRowUpdatesCallback callback) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("rows");
         myRef.orderByChild("lastUpdateDate").startAt(lastUpdateDate);

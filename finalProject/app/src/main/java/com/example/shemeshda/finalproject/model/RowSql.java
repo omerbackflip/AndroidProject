@@ -20,8 +20,8 @@ public class RowSql {
     static final String POSTS_ID = "id";
     static final String POSTS_TEXT= "text";
     static final String POSTS_IMAGE = "image";
+    static final String POST_DELTE ="isDeleted";
     static final String LAST_UPDATE_DATE="lastupdate";
-    ;
 
     static List<RowVew> getAllRows(SQLiteDatabase db) {
         Cursor cursor = db.query(POSTS_TABLE, null, null, null, null, null, null);
@@ -32,17 +32,20 @@ public class RowSql {
             int imageUrl = cursor.getColumnIndex(POSTS_IMAGE);
             int lastUpdate= cursor.getColumnIndex(LAST_UPDATE_DATE);
             int id=cursor.getColumnIndex(POSTS_ID);
-
+            int delete=cursor.getColumnIndex(POST_DELTE);
 
             do {
                 RowVew r = new RowVew();
-                r.user = cursor.getString(user);
-                r.id=cursor.getInt(id);
-                r.text = cursor.getString(text);
-                r.imageUrl =cursor.getString(imageUrl);
-                r.lastUpdateDate=cursor.getDouble(lastUpdate);
+                if(cursor.getInt(delete)!=1) {
+                    r.user = cursor.getString(user);
+                    r.id = cursor.getInt(id);
+                    r.text = cursor.getString(text);
+                    r.isDeleted = false;
+                    r.imageUrl = cursor.getString(imageUrl);
+                    r.lastUpdateDate = cursor.getDouble(lastUpdate);
 
-                list.add(r);
+                    list.add(r);
+                }
             } while (cursor.moveToNext());
         }
         return list;
@@ -55,6 +58,7 @@ public class RowSql {
         values.put(POSTS_USER, r.user);
         values.put(POSTS_TEXT, r.text);
         values.put(POSTS_ID, r.id);
+        values.put(POST_DELTE, 0);
         values.put(POSTS_IMAGE, r.imageUrl);
         values.put(LAST_UPDATE_DATE,r.lastUpdateDate);
         db.insert(POSTS_TABLE, POSTS_ID, values);
@@ -66,8 +70,9 @@ public class RowSql {
                 POSTS_ID + " INT PRIMARY KEY, " +
                 POSTS_USER + " TEXT, " +
                 POSTS_TEXT + " TEXT, " +
+                POST_DELTE + " INT, " +
                 LAST_UPDATE_DATE+" DOUBLE, "+
-               POSTS_IMAGE+ " TEXT);";
+               POSTS_IMAGE+ " TEXT" + ");";
         db.execSQL(sql);
 
 
@@ -102,11 +107,23 @@ public class RowSql {
 
     public static void editRow(SQLiteDatabase db, RowVew r)
     {
-
+        ContentValues values = new ContentValues();
+        values.put(POSTS_USER, r.user);
+        values.put(POSTS_TEXT, r.text);
+        values.put(POSTS_ID, r.id);
+        values.put(POST_DELTE, 0);
+        values.put(POSTS_IMAGE, r.imageUrl);
+        values.put(LAST_UPDATE_DATE,r.lastUpdateDate);
+        db.update(POSTS_TABLE,values,"id=?",new String[]{String.valueOf(r.id)});
     }
 
-    public static void deletePost(SQLiteDatabase db, RowVew rw)
+    public static void deletePost(SQLiteDatabase db, RowVew r)
     {
-
+        ContentValues values = new ContentValues();
+        values.put(POSTS_USER, r.user);
+        values.put(POSTS_TEXT, r.text);
+        values.put(POSTS_ID, r.id);
+        values.put(POST_DELTE, 1);
+        db.update(POSTS_TABLE,values,"id=?",new String[]{String.valueOf(r.id)});
     }
 }

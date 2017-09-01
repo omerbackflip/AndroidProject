@@ -14,12 +14,6 @@ public class ModelUser {
 
 
 
-
-    public void deletePost(RowVew rw)
-    {
-
-    }
-
     public interface loginUserCallBack{
         void onLogin(boolean t);
     }

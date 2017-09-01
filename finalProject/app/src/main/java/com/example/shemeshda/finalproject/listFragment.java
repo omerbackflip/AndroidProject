@@ -14,8 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 
@@ -26,7 +24,6 @@ import java.util.List;
 import android.app.Fragment;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.shemeshda.finalproject.model.ModelRowView;
 import com.example.shemeshda.finalproject.model.ModelUser;
@@ -54,7 +51,7 @@ public class listFragment extends Fragment {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onMessageEvent(ModelRowView.UpdateStudentEvent event) {
+    public void onMessageEvent(ModelRowView.UpdatepostsEvent event) {
        boolean exist = false;
        for (RowVew r: data){
            if (r.id==event.rb.id){
@@ -67,6 +64,7 @@ public class listFragment extends Fragment {
         }
         adapter.notifyDataSetChanged();
         list.setSelection(adapter.getCount() - 1);
+        adapter.notifyDataSetChanged();
 
     }
 
@@ -95,8 +93,8 @@ public class listFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view=inflater.inflate(R.layout.fragment_image_list, container, false);
-        data = ModelRowView.instace.getAllrows();
 
+        data = ModelRowView.instace.getAllrows();
 
         list = (ListView) view.findViewById(R.id.imagelist);
         adapter = new StudentsListAdapter();
