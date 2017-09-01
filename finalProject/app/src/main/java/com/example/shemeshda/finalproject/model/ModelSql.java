@@ -31,4 +31,13 @@ public class ModelSql extends SQLiteOpenHelper {
     {
        return RowSql.checkID(db,id);
     }
+
+    public void editRow(SQLiteDatabase db, RowVew r) {
+        RowSql.editRow(db,r);
+    }
+
+    public void deletePost(SQLiteDatabase db, RowVew rw)
+    {
+        RowSql.deletePost(db,rw);
+    }
 }

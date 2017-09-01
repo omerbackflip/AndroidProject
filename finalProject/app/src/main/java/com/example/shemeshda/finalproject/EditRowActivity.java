@@ -1,23 +1,23 @@
 package com.example.shemeshda.finalproject;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.example.shemeshda.finalproject.model.ModelFirebaseUser;
 import com.example.shemeshda.finalproject.model.ModelRowView;
 import com.example.shemeshda.finalproject.model.ModelUser;
 import com.example.shemeshda.finalproject.model.RowVew;
@@ -26,37 +26,62 @@ import java.util.Random;
 
 import static android.view.View.GONE;
 
-public class AddPostActivity extends Activity {
-
-    // private static String username ;
+public class EditRowActivity extends Activity {
     private static final String ID = "id";
     Bitmap imageBitmap;
     ProgressBar progressBar;
     static final int REQUEST_IMAGE_CAPTURE = 1;
     final static int RESAULT_SUCCESS = 0;
     final static int RESAULT_FAIL = 1;
+    RowVew rw;
 
 
 
-
-    public AddPostActivity() {
+    public EditRowActivity() {
         // Required empty public constructor
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_post);
-
-        final TextView text= (TextView)findViewById(R.id.posttext);
-        ImageButton img= (ImageButton) findViewById(R.id.postimage);
-
-        Button post= (Button)findViewById(R.id.addpost);
-        Button cancel= (Button)findViewById(R.id.cancelpost);
-        ImageButton image=(ImageButton)findViewById(R.id.postimage);
-        progressBar = (ProgressBar) findViewById(R.id.addpostPB);
+        setContentView(R.layout.activity_edit_row);
+        Intent intent = getIntent();
+        int s=intent.getIntExtra("RID2",0);
+        final EditText text= (EditText)findViewById(R.id.edittext);
+        Button post= (Button)findViewById(R.id.save_edit_post);
+        Button cancel= (Button)findViewById(R.id.cancelEdit);
+        final ImageView imageView = (ImageView)findViewById(R.id.editimage);
+        progressBar = (ProgressBar) findViewById(R.id.editpostPB);
         progressBar.setVisibility(GONE);
-        image.setOnClickListener(new View.OnClickListener() {
+
+
+
+        ModelRowView.instace.getRow(String.valueOf(s), new ModelRowView.GetRowCallback() {
+            @Override
+            public void onComplete(RowVew rv) {
+                rw=rv;
+                text.setText(rw.text);
+                ModelRowView.instace.getImage(rw.imageUrl, new ModelRowView.GetImageListener() {
+                    @Override
+                    public void onSuccess(Bitmap image) {
+                        imageView.setImageBitmap(image);
+                    }
+
+                    @Override
+                    public void onFail() {
+
+                    }
+                });
+            }
+
+            @Override
+            public void onCancel() {
+
+            }
+        });
+
+
+        imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 dispatchTakePictureIntent();
@@ -68,12 +93,10 @@ public class AddPostActivity extends Activity {
             @Override
             public void onClick(View v) {
                 progressBar.setVisibility(View.VISIBLE);
-                final RowVew rw = new RowVew();
                 rw.text=text.getText().toString();
                 rw.user= ModelUser.instace.getUsername();
-                 final Intent myIntent = new Intent(v.getContext(), MainActivity.class);
+                final Intent myIntent = new Intent(v.getContext(), MainActivity.class);
                 final Context context=v.getContext();
-                rw.imageUrl="";
 
                 Random rand=new Random();
                 int  randomNum = 1 + rand.nextInt((3000000 - 1) + 1);
@@ -84,15 +107,13 @@ public class AddPostActivity extends Activity {
 
                 }
 
-                rw.id=randomNum;
-
 
                 if (imageBitmap != null) {
                     ModelRowView.instace.saveImage(imageBitmap, rw.user + String.valueOf(randomNum) + ".jpeg", new ModelRowView.SaveImageListener() {
                         @Override
                         public void complete(String url) {
                             rw.imageUrl = url;
-                            ModelRowView.instace.addRow(rw);
+                            ModelRowView.instace.editRow(rw);
                             setResult(RESAULT_SUCCESS);
                             startActivity(myIntent);
                             progressBar.setVisibility(GONE);
@@ -134,6 +155,7 @@ public class AddPostActivity extends Activity {
         super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.main,menu);
         menu.findItem(R.id.main_add).setVisible(false);
+        menu.findItem(R.id.deletePost).setVisible(true);
         return true;
     }
 
@@ -158,7 +180,7 @@ public class AddPostActivity extends Activity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        ImageButton imageView=(ImageButton)findViewById(R.id.postimage);
+        ImageButton imageView=(ImageButton)findViewById(R.id.editimage);
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
             imageBitmap = (Bitmap) extras.get("data");
@@ -181,7 +203,13 @@ public class AddPostActivity extends Activity {
                 Intent myIntent = new Intent(this, MainActivity.class);
                 startActivity(myIntent);
                 finish();
-
+                break;
+            }
+            case R.id.deletePost:{
+                ModelRowView.instace.deletePost(rw);
+                Intent myIntent = new Intent(this, MainActivity.class);
+                startActivity(myIntent);
+                finish();
                 break;
             }
             case android.R.id.home:

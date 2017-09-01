@@ -10,14 +10,17 @@ public class ModelUser {
 
     public final static ModelUser instace = new ModelUser();
 
-    ModelFirebaseUser  modelUserFB;
+    ModelFirebaseUser  modelUserFB=new ModelFirebaseUser();
 
 
-    private ModelUser(){
-        modelUserFB = new ModelFirebaseUser();
+
+
+    public void deletePost(RowVew rw)
+    {
 
     }
-  public interface loginUserCallBack{
+
+    public interface loginUserCallBack{
         void onLogin(boolean t);
     }
 
@@ -42,6 +45,7 @@ public class ModelUser {
     {
         return modelUserFB.isSignIn();
     }
+
     public String getUsername(){
         return modelUserFB.getUsername();
     }

@@ -30,6 +30,12 @@ public class ModelRowView {
     private ModelSql modelSql;
     private ModelFirebase modelFB;
 
+    public void deletePost(RowVew rw)
+    {
+        modelFB.deletePost(rw);
+        modelSql.deletePost(modelSql.getWritableDatabase(),rw);
+    }
+
     public interface SaveImageListener {
         void complete(String url);
         void fail();
@@ -51,6 +57,15 @@ public class ModelRowView {
         modelSql.addRow(modelSql.getWritableDatabase(),r);
     }
 
+    public void editRow( RowVew r){
+        modelFB.addRow(r);
+        modelSql.editRow(modelSql.getWritableDatabase(),r);
+    }
+   public  interface GetRowCallback {
+        void onComplete(RowVew rv);
+
+        void onCancel();
+    }
 
     private void synchStudentsDbAndregisterStudentsUpdates() {
         //1. get local lastUpdateTade
@@ -79,6 +94,11 @@ public class ModelRowView {
                 EventBus.getDefault().post(new UpdateStudentEvent(r));
             }
         });
+    }
+
+    public void getRow(String id,final GetRowCallback callback)
+    {
+        modelFB.getRow(id,callback);
     }
 
     public List<RowVew> getAllrows() {
@@ -148,8 +168,7 @@ public class ModelRowView {
 
     private void saveImageToFile(Bitmap imageBitmap, String imageFileName){
         try {
-            File dir = Environment.getExternalStoragePublicDirectory(
-                    Environment.DIRECTORY_PICTURES);
+            File dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
             if (!dir.exists()) {
                 dir.mkdir();
             }

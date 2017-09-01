@@ -32,16 +32,6 @@ public class ModelFirebase {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("rows");
 
-        Random rand=new Random();
-        int  randomNum = 1 + rand.nextInt((3000000 - 1) + 1);
-
-        while(!ModelRowView.instace.checkID(randomNum))
-        {
-            randomNum = 1 + rand.nextInt((3000000 - 1) + 1);
-
-        }
-
-        rv.id=randomNum;
 
         Map<String, Object> value = new HashMap<>();
         value.put("user", rv.user);
@@ -52,13 +42,9 @@ public class ModelFirebase {
         myRef.child(String.valueOf(rv.id)).setValue(value);
     }
 
-    interface GetRowCallback {
-        void onComplete(RowVew rv);
 
-        void onCancel();
-    }
 
-    public void getRow(String user, final GetRowCallback callback) {
+    public void getRow(String user, final ModelRowView.GetRowCallback callback) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("rows");
         myRef.child(user).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -74,6 +60,8 @@ public class ModelFirebase {
             }
         });
     }
+
+
 
 
     interface RegisterRowUpdatesCallback{
@@ -163,7 +151,14 @@ public class ModelFirebase {
             }
         });
     }
+    public void deletePost(RowVew rw) {
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference("rows");
+        myRef.child(String.valueOf(rw.id)).removeValue();
 
+        FirebaseStorage storage =FirebaseStorage.getInstance();
+
+    }
 }
 
 

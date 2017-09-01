@@ -8,11 +8,18 @@
         android:title="add"
         android:showAsAction="ifRoom"/>
 
+    <item android:id="@+id/deletePost"
+        android:icon="@drawable/delete"
+        android:title="Delete"
+        android:visible="false"
+        android:showAsAction="ifRoom" />
+
     <item android:id="@+id/main_logout"
         android:icon="@drawable/logout"
         android:title="Log out"
-        android:showAsAction="collapseActionView"
-        />
+        android:showAsAction="collapseActionView" />
+
+
 
 
 </menu>

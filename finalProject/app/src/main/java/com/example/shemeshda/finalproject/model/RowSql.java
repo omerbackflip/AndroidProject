@@ -31,11 +31,13 @@ public class RowSql {
             int text = cursor.getColumnIndex(POSTS_TEXT);
             int imageUrl = cursor.getColumnIndex(POSTS_IMAGE);
             int lastUpdate= cursor.getColumnIndex(LAST_UPDATE_DATE);
+            int id=cursor.getColumnIndex(POSTS_ID);
 
 
             do {
                 RowVew r = new RowVew();
                 r.user = cursor.getString(user);
+                r.id=cursor.getInt(id);
                 r.text = cursor.getString(text);
                 r.imageUrl =cursor.getString(imageUrl);
                 r.lastUpdateDate=cursor.getDouble(lastUpdate);
@@ -98,4 +100,13 @@ public class RowSql {
     }
 
 
+    public static void editRow(SQLiteDatabase db, RowVew r)
+    {
+
+    }
+
+    public static void deletePost(SQLiteDatabase db, RowVew rw)
+    {
+
+    }
 }

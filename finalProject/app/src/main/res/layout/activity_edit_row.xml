@@ -3,14 +3,14 @@
     xmlns:tools = "http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height = "match_parent"
     android:orientation="vertical"
-    tools:context = ".MainActivity">
+    tools:context = ".EditRowActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
         <TextView
-            android:text = "Add Post"
+            android:text = "Edit Post"
             android:layout_width="wrap_content"
             android:layout_height = "wrap_content"
             android:id = "@+id/textview"
@@ -29,7 +29,7 @@
         <EditText
             android:layout_width = "wrap_content"
             android:layout_height = "wrap_content"
-            android:id = "@+id/posttext"
+            android:id = "@+id/edittext"
             android:hint = "Text                        "
             android:focusable = "true"
             android:textColorHighlight = "#ff7eff15"
@@ -46,7 +46,7 @@
 
 
     <ImageButton
-        android:id="@+id/postimage"
+        android:id="@+id/editimage"
         android:layout_gravity="left|bottom"
         android:layout_width="100dp"
         android:layout_height="100dp"
@@ -65,8 +65,8 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Post"
-            android:id="@+id/addpost"
+            android:text="save"
+            android:id="@+id/save_edit_post"
             android:layout_alignParentBottom="true"
             android:layout_gravity="bottom"
             android:layout_weight="1"
@@ -78,7 +78,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Cancel"
-            android:id="@+id/cancelpost"
+            android:id="@+id/cancelEdit"
             android:layout_alignParentBottom="true"
             android:layout_toRightOf="@+id/textview"
             android:layout_marginLeft="10dp"
@@ -91,7 +91,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
         <ProgressBar
-            android:id="@+id/addpostPB"
+            android:id="@+id/editpostPB"
             android:layout_gravity="center_horizontal|center_vertical"
             android:layout_width="100dp"
             android:visibility="gone"

@@ -2,6 +2,7 @@ package com.example.shemeshda.finalproject;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 
@@ -32,6 +34,8 @@ import com.example.shemeshda.finalproject.model.RowVew;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+
+import static android.view.View.GONE;
 
 /**
  * Created by shemeshda on 20/08/2017.
@@ -165,16 +169,29 @@ public class listFragment extends Fragment {
             }
             TextView text  = (TextView) convertView.findViewById(R.id.textImage);
             TextView user  = (TextView) convertView.findViewById(R.id.imageuser);
+            final ImageView edit=(ImageView) convertView.findViewById(R.id.edidBTN);
             final ImageView imageView = (ImageView) convertView.findViewById(R.id.rowImage);
+            edit.setVisibility(GONE);
             final ProgressBar progressBar = (ProgressBar) convertView.findViewById(R.id.getImagrPB);
            final RowVew rv = data.get(position);
+            if(rv.user.equals(ModelUser.instace.getUsername()))
+            {
+                edit.setVisibility(View.VISIBLE);
+            }
             text.setText(rv.text);
             user.setText(rv.user);
             Drawable drawable = ResourcesCompat.getDrawable(getResources(), R.drawable.avatar, null);
             imageView.setImageDrawable(drawable);
 
             imageView.setTag(rv.imageUrl);
-
+            edit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent=getActivity().getIntent();
+                    intent.putExtra("RID",rv.id);
+                    mListener.onFragmentInteraction(5);
+                }
+            });
             if (rv.imageUrl != null && !rv.imageUrl.isEmpty() && !rv.imageUrl.equals("")){
                 progressBar.setVisibility(View.VISIBLE);
                 ModelRowView.instace.getImage(rv.imageUrl, new ModelRowView.GetImageListener() {
@@ -183,7 +200,7 @@ public class listFragment extends Fragment {
                         String tagUrl = imageView.getTag().toString();
                         if (tagUrl.equals(rv.imageUrl)) {
                             imageView.setImageBitmap(image);
-                            progressBar.setVisibility(View.GONE);
+                            progressBar.setVisibility(GONE);
                         }
                     }
 
