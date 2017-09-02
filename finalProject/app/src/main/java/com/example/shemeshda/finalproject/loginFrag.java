@@ -42,7 +42,9 @@ public class loginFrag extends Fragment{
         fragment.setArguments(args);
         return fragment;
     }
-
+    /*
+    set the option menu
+     */
     @Override
     public void onPrepareOptionsMenu(Menu menu)
     {
@@ -59,7 +61,7 @@ public class loginFrag extends Fragment{
             username= getArguments().getString(ID);
         }
     }
-
+    //all the button listeners and the the views
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         setHasOptionsMenu(true);
@@ -79,7 +81,7 @@ public class loginFrag extends Fragment{
            mListener.onFragmentInteraction(1); //If the user is singed in, we don't show the login fragment
 
        }
-      else {
+      else { //If the user is not singed in yet
                  login.setOnClickListener(new View.OnClickListener() {
                @Override
                public void onClick(View v) {
@@ -88,6 +90,9 @@ public class loginFrag extends Fragment{
                    progressBar.setVisibility(View.VISIBLE);
                    final String user = username.getText().toString();
                    final  String pas = pass.getText().toString();
+                   /*
+                   checking input and validate it the email structure and the password Pattern
+                    */
                    if(!pas.isEmpty())
                 {
                   if(!android.util.Patterns.EMAIL_ADDRESS.matcher(user).matches()) //Check if the input correct
@@ -98,7 +103,7 @@ public class loginFrag extends Fragment{
                       AlertDialog dialog = builder.create();
                       dialog.show();
                   }
-                   Pattern PASSWORD_PATTERN = Pattern.compile("[a-zA-Z0-9]{6,12}");
+                   Pattern PASSWORD_PATTERN = Pattern.compile("[a-zA-Z0-9]{6,12}"); //Check if the password is invalid and in the correct format
                    if(!PASSWORD_PATTERN.matcher(pas).matches())
                    {
                        progressBar.setVisibility(GONE);
@@ -112,7 +117,7 @@ public class loginFrag extends Fragment{
                        @Override
                        public void onLogin(boolean t) {
                            progressBar.setVisibility(GONE);
-                           if (t) {
+                           if (t) { //Check if there was a success in the log in procsses to the App
 
                                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                                builder.setMessage("Loged In Succefully").setTitle("Success");

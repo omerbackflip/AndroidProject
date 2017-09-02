@@ -19,23 +19,23 @@ public class RowSql {
     static final String POSTS_USER = "username";
     static final String POSTS_ID = "id";
     static final String POSTS_TEXT= "text";
-    static final String POSTS_IMAGE = "image";
+    static final String POSTS_IMAGE = "image"; //Image URL
     static final String POST_DELTE ="isDeleted";
     static final String LAST_UPDATE_DATE="lastupdate";
 
     //Get all the rows from the SQL DB which located localy on the users device
     public static List<RowVew> getAllRows(SQLiteDatabase db) {
         Cursor cursor = db.query(POSTS_TABLE, null, null, null, null, null, null);
-        List<RowVew> list = new LinkedList<RowVew>();
+        List<RowVew> list = new LinkedList<RowVew>(); //List presenting all of the Posts of all of the users
         if (cursor.moveToFirst()) {
             int user = cursor.getColumnIndex(POSTS_USER);
             int text = cursor.getColumnIndex(POSTS_TEXT);
             int imageUrl = cursor.getColumnIndex(POSTS_IMAGE);
-            int lastUpdate= cursor.getColumnIndex(LAST_UPDATE_DATE);
+            int lastUpdate= cursor.getColumnIndex(LAST_UPDATE_DATE); // last photo update date
             int id=cursor.getColumnIndex(POSTS_ID);
             int delete=cursor.getColumnIndex(POST_DELTE);
 
-            do {
+            do { //Get all the post
                 RowVew r = new RowVew();
                 if(cursor.getInt(delete)!=1) {
                     r.user = cursor.getString(user);
@@ -77,7 +77,7 @@ public class RowSql {
             int id2=cursor.getColumnIndex(POSTS_ID);
             int delete=cursor.getColumnIndex(POST_DELTE);
 
-                if(cursor.getInt(delete)!=1) {
+                if(cursor.getInt(delete)!=1) { //Check if this spacif post has deleted
                     r.user = cursor.getString(user);
                     r.id = cursor.getInt(id2);
                     r.text = cursor.getString(text);
@@ -88,11 +88,13 @@ public class RowSql {
                 }
         }
 
-        return r;
+        return r; //return the Row
     }
 
 
-    //Add new row to the SQL DB
+    /*
+    Add new row to the SQL DB
+     */
     public static void addRow(SQLiteDatabase db, RowVew r)
     {
         Log.d("tag","second update");
@@ -101,7 +103,7 @@ public class RowSql {
         values.put(POSTS_TEXT, r.text);
         values.put(POSTS_ID, r.id);
 
-        if(r.isDeleted)
+        if(r.isDeleted) //Check if this spacific post has deleted
             values.put(POST_DELTE, 1);
         else
             values.put(POST_DELTE, 0);
@@ -130,6 +132,9 @@ public class RowSql {
         onCreate(db);
     }
 
+    /*
+    Check if this spacific User id is exists in the sql DB
+     */
     public static  boolean checkID(SQLiteDatabase db,int id)
     {
 
@@ -158,7 +163,7 @@ public class RowSql {
         values.put(POSTS_TEXT, r.text);
         values.put(POSTS_ID, r.id);
 
-        if(r.isDeleted)
+        if(r.isDeleted) //Check if this spacific post has deleted
             values.put(POST_DELTE, 1);
         else
             values.put(POST_DELTE, 0);
@@ -168,14 +173,14 @@ public class RowSql {
         db.update(POSTS_TABLE,values,"id=?",new String[]{String.valueOf(r.id)});
     }
 
-    //When the user is deleting a post he just changes the value of "id_deleted" to be 1
+    //When the user is deleting a post he just changes the value of "is_deleted" to be 1
     public static void deletePost(SQLiteDatabase db, RowVew r)
     {
         ContentValues values = new ContentValues();
         values.put(POSTS_USER, r.user);
         values.put(POSTS_TEXT, r.text);
         values.put(POSTS_ID, r.id);
-        values.put(POST_DELTE, 1);
+        values.put(POST_DELTE, 1); //Set the deleted Flag to - 1 , means this post has deleted
         db.update(POSTS_TABLE,values,"id=?",new String[]{String.valueOf(r.id)});
     }
 }

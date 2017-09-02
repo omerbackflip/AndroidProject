@@ -17,13 +17,10 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
 import com.example.shemeshda.finalproject.model.ModelRowView;
 import com.example.shemeshda.finalproject.model.ModelUser;
 import com.example.shemeshda.finalproject.model.RowVew;
-
 import java.util.Random;
-
 import static android.view.View.GONE;
 
 public class AddPostActivity extends Activity {
@@ -43,13 +40,14 @@ public class AddPostActivity extends Activity {
         // Required empty public constructor
     }
 
+
+    //all the button listeners and the the views
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_post);
 
         final TextView text= (TextView)findViewById(R.id.posttext);
-        ImageButton img= (ImageButton) findViewById(R.id.postimage);
 
         final Button post= (Button)findViewById(R.id.addpost);
        final Button cancel= (Button)findViewById(R.id.cancelpost);
@@ -143,9 +141,6 @@ public class AddPostActivity extends Activity {
     }
 
 
-    // TODO: Rename method, update argument and hook method into UI eve
-
-
 
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
@@ -170,25 +165,15 @@ public class AddPostActivity extends Activity {
             imageView.setImageBitmap(imageBitmap);
         }
     }
+
+    /*
+    When the user clicked on the options menu.
+    The user has several options
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemId = item.getItemId();
         switch (itemId){
-            case R.id.main_add: {
-                Intent myIntent = new Intent(this, AddPostActivity.class);
-                startActivity(myIntent);
-                finish();
-                break;
-            }
-            case R.id.main_logout: {
-                ModelUser.instace.signOut();
-                ModelUser.instace.signOut();
-                Intent myIntent = new Intent(this, MainActivity.class);
-                startActivity(myIntent);
-                finish();
-
-                break;
-            }
             case android.R.id.home:
                 break;
 

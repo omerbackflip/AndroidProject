@@ -29,6 +29,7 @@ public class MainActivity extends Activity implements listFragment.OnFragmentInt
         super.onCreate(savedInstanceState);
         context = getApplicationContext();
 
+        //We are asking for permision to read and writ to the user local storage
         boolean hasPermission = (ContextCompat.checkSelfPermission(this,
                 android.Manifest.permission.WRITE_EXTERNAL_STORAGE) ==
                 PackageManager.PERMISSION_GRANTED);
@@ -49,7 +50,7 @@ public class MainActivity extends Activity implements listFragment.OnFragmentInt
         return context;
     }
 
-    //Listens to the fragment transactions and switched fragments by fragment if
+    //Listens to the fragment transactions and switched fragments and activities
     @Override
     public void onFragmentInteraction(int i) {
 
@@ -109,13 +110,13 @@ public class MainActivity extends Activity implements listFragment.OnFragmentInt
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemId = item.getItemId();
         switch (itemId){
-            case R.id.main_add: {
+            case R.id.main_add: { //If the user wants to add new post
                 Intent myIntent = new Intent(this, AddPostActivity.class);
                 startActivity(myIntent);
                 finish();
                 break;
             }
-            case R.id.main_logout: {
+            case R.id.main_logout: { //if the user wants to logout from his account
                 ModelUser.instace.signOut();
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);

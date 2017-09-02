@@ -1,5 +1,4 @@
 package com.example.shemeshda.finalproject;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -16,16 +15,18 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
 import com.example.shemeshda.finalproject.model.ModelFirebaseUser;
 import com.example.shemeshda.finalproject.model.ModelRowView;
 import com.example.shemeshda.finalproject.model.ModelUser;
 import com.example.shemeshda.finalproject.model.RowVew;
-
 import java.util.Random;
-
 import static android.view.View.GONE;
 
+
+/*
+When the user wants to Edit row - means edit his post
+The user can only edit HIS post, and not edit posts of other users
+ */
 public class EditRowActivity extends Activity {
     private static final String ID = "id";
     Bitmap imageBitmap;
@@ -41,7 +42,7 @@ public class EditRowActivity extends Activity {
     public EditRowActivity() {
         // Required empty public constructor
     }
-
+    //all the button listeners and the the views
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,8 +56,6 @@ public class EditRowActivity extends Activity {
 
         progressBar = (ProgressBar) findViewById(R.id.editpostPB);
         progressBar.setVisibility(GONE);
-
-
 
                 rw=ModelRowView.instace.getRowbyIDsql(String.valueOf(s));
                 text.setText(rw.text);
@@ -147,6 +146,9 @@ public class EditRowActivity extends Activity {
 
     }
 
+    /*
+    Create the user's option menu
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
@@ -186,25 +188,15 @@ public class EditRowActivity extends Activity {
             imageView.setImageBitmap(imageBitmap);
         }
     }
+
+    /*
+    When the user had selected an item in the option menu
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemId = item.getItemId();
         switch (itemId){
-            case R.id.main_add: {
-                Intent myIntent = new Intent(this, AddPostActivity.class);
-                startActivity(myIntent);
-                finish();
-                break;
-            }
-            case R.id.main_logout: {
-                ModelUser.instace.signOut();
-                ModelUser.instace.signOut();
-                Intent myIntent = new Intent(this, MainActivity.class);
-                startActivity(myIntent);
-                finish();
-                break;
-            }
-            case R.id.deletePost:{
+            case R.id.deletePost:{ //When the user wants to delete a spacific post that he has uploaded befor
                 ModelRowView.instace.deletePost(rw);
                 Intent myIntent = new Intent(this, MainActivity.class);
                 startActivity(myIntent);

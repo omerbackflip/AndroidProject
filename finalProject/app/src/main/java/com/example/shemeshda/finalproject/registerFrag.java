@@ -49,6 +49,7 @@ public class registerFrag extends Fragment {
             username= getArguments().getString(ID);
         }
     }
+    //set the option menu
     @Override
     public void onPrepareOptionsMenu(Menu menu)
     {
@@ -57,7 +58,7 @@ public class registerFrag extends Fragment {
         menu.findItem(R.id.main_logout).setVisible(false);
         register.setVisible(false);
     }
-
+//create the button listenrs and views
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         setHasOptionsMenu(true);
@@ -65,8 +66,8 @@ public class registerFrag extends Fragment {
         final ProgressBar progressBar= (ProgressBar) view.findViewById(R.id.regtPB);
         progressBar.setVisibility(GONE);
 
-        final EditText username= (EditText)view.findViewById(R.id.userreg);
-        final EditText pass= (EditText) view.findViewById(R.id.passreg);
+        final EditText username= (EditText)view.findViewById(R.id.userreg); //set the userName
+        final EditText pass= (EditText) view.findViewById(R.id.passreg); //set the Password
 
         final Button reg= (Button)view.findViewById(R.id.regreg);
         final Button bk= (Button)view.findViewById(R.id.backreg);
@@ -83,9 +84,12 @@ public class registerFrag extends Fragment {
                 boolean a=pas.isEmpty();
                 Pattern PASSWORD_PATTERN = Pattern.compile("[a-zA-Z0-9]{6,12}"); //This is how we want out Pattern password to be
                 boolean b=PASSWORD_PATTERN.matcher(pas).matches();
+                    /*
+                   checking input and validate it the email structure and the password Pattern
+                    */
 
-                //If the Email address is not in the correct format
                 if (!a) {
+                    //If the Email address is not in the correct format
                     if (!android.util.Patterns.EMAIL_ADDRESS.matcher(user).matches()) {
                         progressBar.setVisibility(GONE);
                         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -103,7 +107,7 @@ public class registerFrag extends Fragment {
                         AlertDialog dialog = builder.create();
                         dialog.show();
                     }
-                    if(!a && b)
+                    if(!a && b) //if the password is not empty and the password is in the correct format
                     {
                         ModelUser.instace.regUser(user, pas, getActivity(), new ModelUser.regUserCallBack() {
                                     @Override

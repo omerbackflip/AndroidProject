@@ -31,9 +31,10 @@ public class ModelFirebase {
 
     /*
     add row to the firebase
-     if the row exists just update it
+    if the row exists just update it
+    The row saved in the fire base which contains all of the post, and details
+     of all of the Users of the App
      */
-
     public void addRow(RowVew rv) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("rows");
@@ -50,11 +51,13 @@ public class ModelFirebase {
     }
 
 
-    //get rowView from firebase
-    public void getRow(String user, final ModelRowView.GetRowCallback callback) {
+    /*
+    get rowView from firebase By the id
+     */
+    public void getRow(String id, final ModelRowView.GetRowCallback callback) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("rows");
-        myRef.child(user).addListenerForSingleValueEvent(new ValueEventListener() {
+        myRef.child(id).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 RowVew r = dataSnapshot.getValue(RowVew.class);
@@ -70,6 +73,7 @@ public class ModelFirebase {
 
 /*
 listener to changes in FB rows
+Every time that there is a change in the FB this listener runs
  */
     public void postsUpdates(final double lastUpdateDate, final ModelRowView.RegisterRowUpdatesCallback callback) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -108,10 +112,14 @@ listener to changes in FB rows
         listeners.add(listener);
     }
 
-    //save the image in the firebase storage
+
+    /*
+    Save image in the FB storage
+    Every picture the user uploads to the App,
+    Saved in the FB
+     */
     public void saveImage(Bitmap imageBmp, String name, final ModelRowView.SaveImageListener listener){
         FirebaseStorage storage = FirebaseStorage.getInstance();
-
         StorageReference imagesRef = storage.getReference().child("images").child(name);
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -133,7 +141,9 @@ listener to changes in FB rows
         });
     }
 
-    //Get image from the firebase storage
+    /*
+        Get image from the firebase storage
+     */
     public void getImage(String url, final ModelRowView.GetImageListener listener){
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference httpsReference = storage.getReferenceFromUrl(url);

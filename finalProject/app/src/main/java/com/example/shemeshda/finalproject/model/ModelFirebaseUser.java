@@ -26,7 +26,8 @@ public class ModelFirebaseUser
 
     private FirebaseAuth mAuth;
      FirebaseUser user;
-     String userName;
+     String userName; //The string of the current user which logged in to the app
+                        //This string is needed in order to add Edit rights to the users posts
 
 
 
@@ -39,7 +40,7 @@ public class ModelFirebaseUser
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             user = mAuth.getCurrentUser();
-                            userName=user.getEmail();
+                            userName=user.getEmail(); //set the User's Email
                             callback.onLogin(true);
 
                         } else {
@@ -64,7 +65,7 @@ public class ModelFirebaseUser
                 if (task.isSuccessful()) {
                     // Sign in success, update UI with the signed-in user's information
                     user = mAuth.getCurrentUser();
-                    userName=user.getEmail();
+                    userName=user.getEmail(); //Set the users Email Address
                     callback.onReg(true);
 
                 } else {
@@ -77,15 +78,21 @@ public class ModelFirebaseUser
 
     }
 
-    //When the user is singing out
+    /*
+    When the users is finished using the App
+    The user is singing out
+     */
     public void signOut()
     {
         mAuth = FirebaseAuth.getInstance();
-        FirebaseAuth.getInstance().signOut();
+        FirebaseAuth.getInstance().signOut(); //sign out of the FireBase
         user=null;
         userName=null;
     }
-//return if the user is sign in
+
+    /*
+    return if the user is sign in
+     */
     public boolean isSignIn()
     {
 
@@ -100,15 +107,22 @@ public class ModelFirebaseUser
             return false;
         }
     }
+
+    /*
+    Return the User Name
+     */
 public String getUsername()
 {
 
         return userName;
 }
 
+
+    /*
+    Set the User Name
+     */
     public void setUsername(String user)
     {
-
         userName=user;
     }
 

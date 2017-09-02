@@ -42,7 +42,7 @@ import static android.view.View.GONE;
 
 public class listFragment extends Fragment {
     ListView list;
-    List<RowVew> data;
+    List<RowVew> data; //List of the posts that the user's has uploaded
 
     StudentsListAdapter adapter;
 
@@ -88,6 +88,7 @@ public class listFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
+    //set the option menu
     @Override
     public void onPrepareOptionsMenu(Menu menu)
     {
@@ -102,7 +103,6 @@ public class listFragment extends Fragment {
         View view=inflater.inflate(R.layout.fragment_image_list, container, false);
 
         data = ModelRowView.instace.getAllrows();
-        Log.d("gold",""+data.size());
 
         list = (ListView) view.findViewById(R.id.imagelist);
         adapter = new StudentsListAdapter();
@@ -155,6 +155,10 @@ public class listFragment extends Fragment {
     class StudentsListAdapter extends BaseAdapter {
         LayoutInflater inflater = getActivity().getLayoutInflater();
 
+
+        /*
+        Get count of all of the posts
+         */
         @Override
         public int getCount() {
            return data.size();
@@ -165,11 +169,16 @@ public class listFragment extends Fragment {
             return null;
         }
 
+
         @Override
         public long getItemId(int position) {
             return 0;
         }
 
+
+        /*
+        set and configure the list row view and functionality
+         */
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             if (convertView == null) {
