@@ -1,7 +1,6 @@
 package com.example.shemeshda.finalproject;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -19,7 +18,6 @@ import com.example.shemeshda.finalproject.model.ModelRowView;
 import com.example.shemeshda.finalproject.model.ModelUser;
 import com.example.shemeshda.finalproject.model.RowVew;
 
-import java.util.Random;
 
 import static android.view.View.GONE;
 

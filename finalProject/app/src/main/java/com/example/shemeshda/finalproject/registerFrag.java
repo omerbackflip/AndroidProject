@@ -166,8 +166,8 @@ public class registerFrag extends Fragment {
         if (context instanceof loginFrag.OnFragmentInteractionListener) {
             mListener = (loginFrag.OnFragmentInteractionListener) context;
         } else {
-//            throw new RuntimeException(context.toString()
-//                    + " must implement OnFragmentInteractionListener");
+            throw new RuntimeException(context.toString()
+                    + " must implement OnFragmentInteractionListener");
         }
     }
 
@@ -176,9 +176,4 @@ public class registerFrag extends Fragment {
         super.onDetach();
         mListener = null;
     }
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(int i);
-    }
-
 }
