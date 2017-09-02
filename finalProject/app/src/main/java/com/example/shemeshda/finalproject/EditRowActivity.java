@@ -1,11 +1,11 @@
 package com.example.shemeshda.finalproject;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.provider.MediaStore;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,12 +14,13 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.TextView;
-import com.example.shemeshda.finalproject.model.ModelFirebaseUser;
+
 import com.example.shemeshda.finalproject.model.ModelRowView;
 import com.example.shemeshda.finalproject.model.ModelUser;
 import com.example.shemeshda.finalproject.model.RowVew;
+
 import java.util.Random;
+
 import static android.view.View.GONE;
 
 
@@ -92,21 +93,9 @@ public class EditRowActivity extends Activity {
                     rw.text = text.getText().toString();
                     rw.user = ModelUser.instace.getUsername();
                     final Intent myIntent = new Intent(v.getContext(), MainActivity.class);
-                    final Context context = v.getContext();
-
-                //*** A random number between 1 to 3000000, we re-randomise this number everytime if this number has already selected
-
-                    Random rand = new Random();
-                    int randomNum = 1 + rand.nextInt((3000000 - 1) + 1);
-
-                    while (!ModelRowView.instace.checkID(randomNum)) {
-                        randomNum = 1 + rand.nextInt((3000000 - 1) + 1);
-
-                    }
-
 
                     if (imageBitmap != null) {
-                        ModelRowView.instace.saveImage(imageBitmap, rw.user + String.valueOf(randomNum) + ".jpeg", new ModelRowView.SaveImageListener() {
+                        ModelRowView.instace.saveImage(imageBitmap, rw.user + String.valueOf(rw.id) + ".jpeg", new ModelRowView.SaveImageListener() {
                             @Override
                             public void complete(String url) {
                                 rw.imageUrl = url;

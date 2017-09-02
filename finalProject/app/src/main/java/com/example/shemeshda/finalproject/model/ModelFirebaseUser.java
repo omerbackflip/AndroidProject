@@ -12,11 +12,6 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import java.util.concurrent.Executor;
-
-import static android.R.attr.delay;
-import static java.lang.Thread.sleep;
-
 /**
  * Created by Daniel on 24/08/2017.
  */

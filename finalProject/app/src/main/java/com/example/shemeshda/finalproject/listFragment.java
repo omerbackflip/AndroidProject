@@ -1,13 +1,13 @@
 package com.example.shemeshda.finalproject;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.content.res.ResourcesCompat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,12 +17,6 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
-
-
-
-import java.util.List;
-
-import android.app.Fragment;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -33,6 +27,8 @@ import com.example.shemeshda.finalproject.model.RowVew;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+
+import java.util.List;
 
 import static android.view.View.GONE;
 

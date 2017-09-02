@@ -1,13 +1,9 @@
 package com.example.shemeshda.finalproject.model;
 
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
-
-import com.example.shemeshda.finalproject.finalProject;
 
 import java.util.LinkedList;
 import java.util.List;

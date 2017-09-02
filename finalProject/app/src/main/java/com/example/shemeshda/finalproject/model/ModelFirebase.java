@@ -2,7 +2,6 @@ package com.example.shemeshda.finalproject.model;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.inputmethodservice.Keyboard;
 import android.net.Uri;
 import android.util.Log;
 
@@ -24,7 +23,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 public class ModelFirebase {
     List<ChildEventListener> listeners = new LinkedList<ChildEventListener>();
