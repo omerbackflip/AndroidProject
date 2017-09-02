@@ -65,17 +65,18 @@ public class registerFrag extends Fragment {
         final ProgressBar progressBar= (ProgressBar) view.findViewById(R.id.regtPB);
         progressBar.setVisibility(GONE);
 
-       final EditText username= (EditText)view.findViewById(R.id.userreg);
+        final EditText username= (EditText)view.findViewById(R.id.userreg);
         final EditText pass= (EditText) view.findViewById(R.id.passreg);
 
-        Button reg= (Button)view.findViewById(R.id.regreg);
-        Button bk= (Button)view.findViewById(R.id.backreg);
+        final Button reg= (Button)view.findViewById(R.id.regreg);
+        final Button bk= (Button)view.findViewById(R.id.backreg);
 
 
         reg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                reg.setEnabled(false);
+                bk.setEnabled(false);
                 progressBar.setVisibility(View.VISIBLE);
                 String user = username.getText().toString();
                 String pas = pass.getText().toString();

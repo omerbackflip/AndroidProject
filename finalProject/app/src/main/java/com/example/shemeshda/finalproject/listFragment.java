@@ -175,23 +175,26 @@ public class listFragment extends Fragment {
             if (convertView == null) {
                 convertView = inflater.inflate(R.layout.fragment_list_row, null);
             }
+
             TextView text  = (TextView) convertView.findViewById(R.id.textImage);
             TextView user  = (TextView) convertView.findViewById(R.id.imageuser);
             final ImageView edit=(ImageView) convertView.findViewById(R.id.edidBTN);
             final ImageView imageView = (ImageView) convertView.findViewById(R.id.rowImage);
             edit.setVisibility(GONE);
             final ProgressBar progressBar = (ProgressBar) convertView.findViewById(R.id.getImagrPB);
-           final RowVew rv = data.get(position);
+            final RowVew rv = data.get(position);
+
             if(rv.user.equals(ModelUser.instace.getUsername()))
             {
                 edit.setVisibility(View.VISIBLE);
             }
+
             text.setText(rv.text);
             user.setText(rv.user);
             Drawable drawable = ResourcesCompat.getDrawable(getResources(), R.drawable.avatar, null);
             imageView.setImageDrawable(drawable);
-
             imageView.setTag(rv.imageUrl);
+
             edit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -200,6 +203,7 @@ public class listFragment extends Fragment {
                     mListener.onFragmentInteraction(5);
                 }
             });
+
             if (rv.imageUrl != null && !rv.imageUrl.isEmpty() && !rv.imageUrl.equals("")){
                 progressBar.setVisibility(View.VISIBLE);
                 ModelRowView.instace.getImage(rv.imageUrl, new ModelRowView.GetImageListener() {
@@ -218,6 +222,9 @@ public class listFragment extends Fragment {
                     }
                 });
             }
+            else
+                imageView.setVisibility(GONE);
+
             return convertView;
         }
     }

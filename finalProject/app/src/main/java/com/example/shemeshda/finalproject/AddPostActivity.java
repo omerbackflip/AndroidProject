@@ -51,8 +51,8 @@ public class AddPostActivity extends Activity {
         final TextView text= (TextView)findViewById(R.id.posttext);
         ImageButton img= (ImageButton) findViewById(R.id.postimage);
 
-        Button post= (Button)findViewById(R.id.addpost);
-        Button cancel= (Button)findViewById(R.id.cancelpost);
+        final Button post= (Button)findViewById(R.id.addpost);
+       final Button cancel= (Button)findViewById(R.id.cancelpost);
         ImageButton image=(ImageButton)findViewById(R.id.postimage);
         progressBar = (ProgressBar) findViewById(R.id.addpostPB);
         progressBar.setVisibility(GONE);
@@ -68,6 +68,8 @@ public class AddPostActivity extends Activity {
             @Override
             public void onClick(View v) {
                 progressBar.setVisibility(View.VISIBLE);
+                post.setEnabled(false);
+                cancel.setEnabled(false);
                 final RowVew rw = new RowVew();
                 rw.text=text.getText().toString();
                 rw.user= ModelUser.instace.getUsername();
@@ -134,6 +136,7 @@ public class AddPostActivity extends Activity {
         super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.main,menu);
         menu.findItem(R.id.main_add).setVisible(false);
+        menu.findItem(R.id.main_logout).setVisible(false);
         return true;
     }
 

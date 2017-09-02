@@ -29,6 +29,7 @@ import static android.view.View.GONE;
 public class EditRowActivity extends Activity {
     private static final String ID = "id";
     Bitmap imageBitmap;
+    private MenuItem delete;
     ProgressBar progressBar;
     static final int REQUEST_IMAGE_CAPTURE = 1;
     final static int RESAULT_SUCCESS = 0;
@@ -48,9 +49,10 @@ public class EditRowActivity extends Activity {
         Intent intent = getIntent();
         int s=intent.getIntExtra("RID2",0);
         final EditText text= (EditText)findViewById(R.id.edittext);
-        Button post= (Button)findViewById(R.id.save_edit_post);
-        Button cancel= (Button)findViewById(R.id.cancelEdit);
+        final  Button post= (Button)findViewById(R.id.save_edit_post);
+       final Button cancel= (Button)findViewById(R.id.cancelEdit);
         final ImageView imageView = (ImageView)findViewById(R.id.editimage);
+
         progressBar = (ProgressBar) findViewById(R.id.editpostPB);
         progressBar.setVisibility(GONE);
 
@@ -94,50 +96,51 @@ public class EditRowActivity extends Activity {
         {
             @Override
             public void onClick(View v) {
-                progressBar.setVisibility(View.VISIBLE);
-                rw.text=text.getText().toString();
-                rw.user= ModelUser.instace.getUsername();
-                final Intent myIntent = new Intent(v.getContext(), MainActivity.class);
-                final Context context=v.getContext();
+                    delete.setVisible(false);
+                    post.setEnabled(false);
+                    cancel.setEnabled(false);
+                    progressBar.setVisibility(View.VISIBLE);
+                    rw.text = text.getText().toString();
+                    rw.user = ModelUser.instace.getUsername();
+                    final Intent myIntent = new Intent(v.getContext(), MainActivity.class);
+                    final Context context = v.getContext();
 
-                Random rand=new Random();
-                int  randomNum = 1 + rand.nextInt((3000000 - 1) + 1);
+                    Random rand = new Random();
+                    int randomNum = 1 + rand.nextInt((3000000 - 1) + 1);
 
-                while(!ModelRowView.instace.checkID(randomNum))
-                {
-                    randomNum = 1 + rand.nextInt((3000000 - 1) + 1);
+                    while (!ModelRowView.instace.checkID(randomNum)) {
+                        randomNum = 1 + rand.nextInt((3000000 - 1) + 1);
+
+                    }
+
+
+                    if (imageBitmap != null) {
+                        ModelRowView.instace.saveImage(imageBitmap, rw.user + String.valueOf(randomNum) + ".jpeg", new ModelRowView.SaveImageListener() {
+                            @Override
+                            public void complete(String url) {
+                                rw.imageUrl = url;
+                                ModelRowView.instace.editRow(rw);
+                                setResult(RESAULT_SUCCESS);
+                                startActivity(myIntent);
+                                progressBar.setVisibility(GONE);
+                                finish();
+                            }
+
+                            @Override
+                            public void fail() {
+                                setResult(RESAULT_FAIL);
+                            }
+                        });
+                    } else {
+                        ModelRowView.instace.addRow(rw);
+                        setResult(RESAULT_SUCCESS);
+                        startActivity(myIntent);
+
+                        finish();
+                    }
 
                 }
 
-
-                if (imageBitmap != null) {
-                    ModelRowView.instace.saveImage(imageBitmap, rw.user + String.valueOf(randomNum) + ".jpeg", new ModelRowView.SaveImageListener() {
-                        @Override
-                        public void complete(String url) {
-                            rw.imageUrl = url;
-                            ModelRowView.instace.editRow(rw);
-                            setResult(RESAULT_SUCCESS);
-                            startActivity(myIntent);
-                            progressBar.setVisibility(GONE);
-                            finish();
-                        }
-
-                        @Override
-                        public void fail() {
-                            setResult(RESAULT_FAIL);
-                        }
-                    });
-                }else{
-                    ModelRowView.instace.addRow(rw);
-                    setResult(RESAULT_SUCCESS);
-                    startActivity(myIntent);
-
-                    finish();
-                }
-
-
-
-            }
         });
 
         cancel.setOnClickListener(new View.OnClickListener() {
@@ -156,8 +159,10 @@ public class EditRowActivity extends Activity {
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.main,menu);
+        delete=menu.findItem(R.id.deletePost);
+        delete.setVisible(true);
         menu.findItem(R.id.main_add).setVisible(false);
-        menu.findItem(R.id.deletePost).setVisible(true);
+        menu.findItem(R.id.main_logout).setVisible(false);
         return true;
     }
 

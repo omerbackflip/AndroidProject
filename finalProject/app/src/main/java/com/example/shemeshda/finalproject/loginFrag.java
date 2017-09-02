@@ -11,13 +11,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-
-import com.example.shemeshda.finalproject.model.ModelFirebaseUser;
-import com.example.shemeshda.finalproject.model.ModelRowView;
 import com.example.shemeshda.finalproject.model.ModelUser;
 
 import java.util.regex.Pattern;
@@ -75,8 +71,8 @@ public class loginFrag extends Fragment{
        final EditText username= (EditText)view.findViewById(R.id.userlogin);
         final EditText pass= (EditText) view.findViewById(R.id.passlogin);
 
-        Button login= (Button)view.findViewById(R.id.loginbtn);
-        Button reg= (Button)view.findViewById(R.id.loginreg);
+      final  Button login= (Button)view.findViewById(R.id.loginbtn);
+        final Button reg= (Button)view.findViewById(R.id.loginreg);
 
 
         if(ModelUser.instace.isSignIn()) {
@@ -87,7 +83,8 @@ public class loginFrag extends Fragment{
                  login.setOnClickListener(new View.OnClickListener() {
                @Override
                public void onClick(View v) {
-
+                    login.setEnabled(false);
+                   reg.setEnabled(false);
                    progressBar.setVisibility(View.VISIBLE);
                    final String user = username.getText().toString();
                    final  String pas = pass.getText().toString();
