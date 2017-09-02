@@ -8,11 +8,8 @@ import android.net.Uri;
 import android.os.Environment;
 import android.util.Log;
 import android.webkit.URLUtil;
-
 import com.example.shemeshda.finalproject.finalProject;
-
 import org.greenrobot.eventbus.EventBus;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -28,15 +25,12 @@ public class ModelRowView {
     private ModelSql modelSql;
     private ModelFirebase modelFB;
 
+    //change the is delete to true and update the row in FB
     public void deletePost(RowVew rw)
     {
         rw.isDeleted=true;
         modelFB.addRow(rw);
     }
-    public int getRowSql(RowVew rw){
-        return modelSql.getRow(modelSql.getReadableDatabase(),rw);
-    }
-
     public interface SaveImageListener {
         void complete(String url);
         void fail();
@@ -56,14 +50,13 @@ public class ModelRowView {
         modelSql =new ModelSql(finalProject.getMyContext());
         synchRowsDbAndregisterRowUpdates();
     }
-
+//add row to fb
     public void addRow( RowVew r){
           modelFB.addRow(r);
     }
-
+//update row info in FB
     public void editRow( RowVew r){
         modelFB.addRow(r);
-        modelSql.editRow(modelSql.getWritableDatabase(),r);
     }
    public  interface GetRowCallback {
         void onComplete(RowVew rv);
@@ -71,6 +64,7 @@ public class ModelRowView {
         void onCancel();
     }
 
+    //This function listns to changes in the FB
     private void synchRowsDbAndregisterRowUpdates() {
         Log.d("gold","synch first");
         //1. get local lastUpdateTade
@@ -83,11 +77,11 @@ public class ModelRowView {
             public void onRowUpdate(RowVew r) {
                 Log.d("gold","synch five");
                 //3. update the local db;
-                int i=getRowSql(r);
-                if(i > 0)
-                    RowSql.editRow(modelSql.getWritableDatabase(),r);
+                boolean i= !checkID(r.id);
+                if(i)
+                    modelSql.editRow(modelSql.getWritableDatabase(),r);
                 else
-                    RowSql.addRow(modelSql.getWritableDatabase(),r);
+                    modelSql.addRow(modelSql.getWritableDatabase(),r);
                 //4. update the lastUpdateTade
                 SharedPreferences pref = finalProject.getMyContext().getSharedPreferences("TAG", Context.MODE_PRIVATE);
                 final double lastUpdateDate = pref.getFloat("RowLastUpdateDate",0);
@@ -105,11 +99,12 @@ public class ModelRowView {
         });
     }
 
+    //get row from FB
     public void getRow(String id,final GetRowCallback callback)
     {
         modelFB.getRow(id,callback);
     }
-
+    //return all rows in the sql db
     public List<RowVew> getAllrows() {
 
         return RowSql.getAllRows(modelSql.getReadableDatabase());
@@ -122,12 +117,19 @@ public class ModelRowView {
         }
     }
 
+    //checking if the id already exist in the sql db
     public boolean checkID(int id)
     {
         return modelSql.checkID(modelSql.getReadableDatabase(),id);
     }
 
+    //get row by id from sql db
+    public RowVew getRowbyIDsql(String id)
+    {
+        return modelSql.getRowbyIDsql(modelSql.getReadableDatabase(),id);
+    }
 
+    //Save the image in FB storage and then added in to local file storage
     public void saveImage(final Bitmap imageBmp, final String name, final SaveImageListener listener) {
         modelFB.saveImage(imageBmp, name, new SaveImageListener() {
             @Override
@@ -144,7 +146,7 @@ public class ModelRowView {
 
 
     }
-
+    //get the image from FB storage and checking if it saved in local file storage
     public void getImage(final String url, final GetImageListener listener) {
         //check if image exsist localy
         String fileName = URLUtil.guessFileName(url, null, null);
@@ -174,7 +176,7 @@ public class ModelRowView {
 
 
     }
-
+//save the image in local storage
     private void saveImageToFile(Bitmap imageBitmap, String imageFileName){
         try {
             File dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
@@ -195,7 +197,7 @@ public class ModelRowView {
             e.printStackTrace();
         }
     }
-
+    //load image from local storage
     private Bitmap loadImageFromFile(String imageFileName){
         Bitmap bitmap = null;
         try {
@@ -211,7 +213,7 @@ public class ModelRowView {
         }
         return bitmap;
     }
-
+//add the picture to user picture gallery
     private void addPicureToGallery(File imageFile){
         //add the picture to the gallery so we dont need to manage the cache size
         Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
@@ -219,4 +221,6 @@ public class ModelRowView {
         mediaScanIntent.setData(contentUri);
         finalProject.getMyContext().sendBroadcast(mediaScanIntent);
     }
+
+
 }

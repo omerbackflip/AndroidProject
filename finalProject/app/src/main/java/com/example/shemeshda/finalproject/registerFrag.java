@@ -81,8 +81,10 @@ public class registerFrag extends Fragment {
                 String user = username.getText().toString();
                 String pas = pass.getText().toString();
                 boolean a=pas.isEmpty();
-                Pattern PASSWORD_PATTERN = Pattern.compile("[a-zA-Z0-9]{6,12}");
+                Pattern PASSWORD_PATTERN = Pattern.compile("[a-zA-Z0-9]{6,12}"); //This is how we want out Pattern password to be
                 boolean b=PASSWORD_PATTERN.matcher(pas).matches();
+
+                //If the Email address is not in the correct format
                 if (!a) {
                     if (!android.util.Patterns.EMAIL_ADDRESS.matcher(user).matches()) {
                         progressBar.setVisibility(GONE);
@@ -93,7 +95,7 @@ public class registerFrag extends Fragment {
                     }
 
 
-
+                    //If the password is not in the correct format
                     if (!b) {
                         progressBar.setVisibility(GONE);
                         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());

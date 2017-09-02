@@ -49,11 +49,12 @@ public class MainActivity extends Activity implements listFragment.OnFragmentInt
         return context;
     }
 
+    //Listens to the fragment transactions and switched fragments by fragment if
     @Override
     public void onFragmentInteraction(int i) {
 
         switch (i) {
-            case 0:
+            case 0: //Login fragment
             {
                 loginFrag list = loginFrag.newInstance();
                 tran = getFragmentManager().beginTransaction();
@@ -61,7 +62,7 @@ public class MainActivity extends Activity implements listFragment.OnFragmentInt
                 tran.commit();
                 break;
             }
-            case 1: {
+            case 1: { //List fragment - the list of all the photos and discriptions of the users
                 Log.d("gold","first check");
                 listFragment list = listFragment.newInstance();
                 tran = getFragmentManager().beginTransaction();
@@ -69,14 +70,14 @@ public class MainActivity extends Activity implements listFragment.OnFragmentInt
                 tran.commit();
                 break;
             }
-            case 2: {
+            case 2: { //Register fragment
                 registerFrag list = registerFrag.newInstance();
                 tran = getFragmentManager().beginTransaction();
                 tran.replace(R.id.main_container, list);
                 tran.commit();
                 break;
             }
-            case 3: {
+            case 3: { //Add post fragment
                 Intent myIntent = new Intent(this, AddPostActivity.class);
                 startActivity(myIntent);
                 finish();
@@ -91,8 +92,7 @@ public class MainActivity extends Activity implements listFragment.OnFragmentInt
             }
             case 5:
             {
-
-                Intent myIntent = new Intent(this, EditRowActivity.class);
+                Intent myIntent = new Intent(this, EditRowActivity.class); //Edit post fragments
                 int k=getIntent().getIntExtra("RID",0);
                 myIntent.putExtra("RID2",k);
                 startActivity(myIntent);
@@ -104,6 +104,7 @@ public class MainActivity extends Activity implements listFragment.OnFragmentInt
 
     }
 
+    //The listener who listens menu clicks
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemId = item.getItemId();

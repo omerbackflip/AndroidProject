@@ -30,7 +30,7 @@ public class ModelFirebaseUser
 
 
 
-
+    //validate the value entered by the user when the user is logging in to the app
     public void loginUser(final String email, String password, Activity act, final ModelUser.loginUserCallBack callback)  {
         mAuth = FirebaseAuth.getInstance();
         mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(act, new OnCompleteListener<AuthResult>() {
@@ -53,7 +53,8 @@ public class ModelFirebaseUser
 
     }
 
-
+    //When the user first register to the app.
+    //The user is entering his details and validate the email and password
     public void regUser(final String email, String password, Activity activity,final ModelUser.regUserCallBack callback)
     {
         mAuth = FirebaseAuth.getInstance();
@@ -76,6 +77,7 @@ public class ModelFirebaseUser
 
     }
 
+    //When the user is singing out
     public void signOut()
     {
         mAuth = FirebaseAuth.getInstance();
@@ -83,7 +85,7 @@ public class ModelFirebaseUser
         user=null;
         userName=null;
     }
-
+//return if the user is sign in
     public boolean isSignIn()
     {
 

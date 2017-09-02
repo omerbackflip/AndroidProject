@@ -77,6 +77,8 @@ public class AddPostActivity extends Activity {
                 final Context context=v.getContext();
                 rw.imageUrl="";
 
+                //*** A random number between 1 to 3000000, we re-randomise this number everytime if this number has already selected
+
                 Random rand=new Random();
                 int  randomNum = 1 + rand.nextInt((3000000 - 1) + 1);
 
@@ -151,7 +153,7 @@ public class AddPostActivity extends Activity {
     }
 
 
-
+    //Open the C
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(MainActivity.getMyContext().getPackageManager()) != null) {

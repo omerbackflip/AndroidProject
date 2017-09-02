@@ -76,7 +76,7 @@ public class loginFrag extends Fragment{
 
 
         if(ModelUser.instace.isSignIn()) {
-           mListener.onFragmentInteraction(1);
+           mListener.onFragmentInteraction(1); //If the user is singed in, we don't show the login fragment
 
        }
       else {
@@ -90,7 +90,7 @@ public class loginFrag extends Fragment{
                    final  String pas = pass.getText().toString();
                    if(!pas.isEmpty())
                 {
-                  if(!android.util.Patterns.EMAIL_ADDRESS.matcher(user).matches())
+                  if(!android.util.Patterns.EMAIL_ADDRESS.matcher(user).matches()) //Check if the input correct
                   {
                       progressBar.setVisibility(GONE);
                       AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());

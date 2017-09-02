@@ -12,6 +12,6 @@ public class RowVew
     public String text;
     public double lastUpdateDate;
     public int id;
-    public boolean isDeleted;
+    public boolean isDeleted; //This flag mentiond if the user has deleted this spacific post or not
 
 }

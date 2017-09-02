@@ -29,6 +29,11 @@ import java.util.Random;
 public class ModelFirebase {
     List<ChildEventListener> listeners = new LinkedList<ChildEventListener>();
 
+    /*
+    add row to the firebase
+     if the row exists just update it
+     */
+
     public void addRow(RowVew rv) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("rows");
@@ -45,7 +50,7 @@ public class ModelFirebase {
     }
 
 
-
+    //get rowView from firebase
     public void getRow(String user, final ModelRowView.GetRowCallback callback) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("rows");
@@ -63,17 +68,16 @@ public class ModelFirebase {
         });
     }
 
-
+/*
+listener to changes in FB rows
+ */
     public void postsUpdates(final double lastUpdateDate, final ModelRowView.RegisterRowUpdatesCallback callback) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("rows");
-        Log.d("gold","synch second");
         myRef.orderByChild("lastUpdateDate").startAt(lastUpdateDate);
         ChildEventListener listener = myRef.orderByChild("lastUpdateDate").startAt(lastUpdateDate).addChildEventListener(new ChildEventListener() {
                     @Override
                     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                        Log.d("TAG","onChildAdded called");
-                        Log.d("gold","synch third");
                         RowVew r = dataSnapshot.getValue(RowVew.class);
                         callback.onRowUpdate(r);
                     }
@@ -81,8 +85,6 @@ public class ModelFirebase {
                     @Override
                     public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                         RowVew r = dataSnapshot.getValue(RowVew.class);
-                        Log.d("gold","synch four");
-                        Log.d("tag","checkkk update");
                         callback.onRowUpdate(r);
                     }
 
@@ -106,6 +108,7 @@ public class ModelFirebase {
         listeners.add(listener);
     }
 
+    //save the image in the firebase storage
     public void saveImage(Bitmap imageBmp, String name, final ModelRowView.SaveImageListener listener){
         FirebaseStorage storage = FirebaseStorage.getInstance();
 
@@ -130,7 +133,7 @@ public class ModelFirebase {
         });
     }
 
-
+    //Get image from the firebase storage
     public void getImage(String url, final ModelRowView.GetImageListener listener){
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference httpsReference = storage.getReferenceFromUrl(url);

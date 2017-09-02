@@ -58,10 +58,7 @@ public class EditRowActivity extends Activity {
 
 
 
-        ModelRowView.instace.getRow(String.valueOf(s), new ModelRowView.GetRowCallback() {
-            @Override
-            public void onComplete(RowVew rv) {
-                rw = rv;
+                rw=ModelRowView.instace.getRowbyIDsql(String.valueOf(s));
                 text.setText(rw.text);
                 if (!rw.imageUrl.equals("")) {
                     ModelRowView.instace.getImage(rw.imageUrl, new ModelRowView.GetImageListener() {
@@ -76,13 +73,6 @@ public class EditRowActivity extends Activity {
                         }
                     });
                 }
-            }
-
-            @Override
-            public void onCancel() {
-
-            }
-        });
 
 
         imageView.setOnClickListener(new View.OnClickListener() {
@@ -104,6 +94,8 @@ public class EditRowActivity extends Activity {
                     rw.user = ModelUser.instace.getUsername();
                     final Intent myIntent = new Intent(v.getContext(), MainActivity.class);
                     final Context context = v.getContext();
+
+                //*** A random number between 1 to 3000000, we re-randomise this number everytime if this number has already selected
 
                     Random rand = new Random();
                     int randomNum = 1 + rand.nextInt((3000000 - 1) + 1);
@@ -177,7 +169,7 @@ public class EditRowActivity extends Activity {
     }
 
 
-
+    //Open the camera to take picture
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(MainActivity.getMyContext().getPackageManager()) != null) {

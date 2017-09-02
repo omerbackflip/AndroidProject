@@ -41,8 +41,8 @@ public class ModelSql extends SQLiteOpenHelper {
         RowSql.deletePost(db,rw);
     }
 
-    public int getRow(SQLiteDatabase db, RowVew rw)
+    public RowVew getRowbyIDsql(SQLiteDatabase db, String id)
     {
-        return RowSql.getRowID(db,String.valueOf(rw.id));
+        return RowSql.getRowbyIDsql(db,id);
     }
 }

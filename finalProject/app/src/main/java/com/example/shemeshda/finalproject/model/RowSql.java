@@ -23,6 +23,7 @@ public class RowSql {
     static final String POST_DELTE ="isDeleted";
     static final String LAST_UPDATE_DATE="lastupdate";
 
+    //Get all the rows from the SQL DB which located localy on the users device
     public static List<RowVew> getAllRows(SQLiteDatabase db) {
         Cursor cursor = db.query(POSTS_TABLE, null, null, null, null, null, null);
         List<RowVew> list = new LinkedList<RowVew>();
@@ -50,27 +51,48 @@ public class RowSql {
         }
         return list;
     }
-    public static int getRowID(SQLiteDatabase db, String id) {
-        int id3=0;
+
+    //Get row by user ID from sql
+    public static RowVew getRowbyIDsql(SQLiteDatabase db,String id)
+    {
+        RowVew r=new RowVew();
+
+
         String table = POSTS_TABLE;
-        String[] columns = {"id"};
+        String[] columns = null;
         String selection = "id =?";
-        String[] selectionArgs = {String.valueOf(id)};
+        String[] selectionArgs = {id};
         String groupBy = null;
         String having = null;
         String orderBy = null;
         String limit = null;
 
-        Cursor cursor = db.query(table, columns, selection, selectionArgs, groupBy, having, orderBy, limit);
+        Cursor cursor =db.query(table, columns, selection, selectionArgs, groupBy, having, orderBy, limit);
 
-            int id2 = cursor.getColumnIndex(POSTS_ID);
+        if (cursor.moveToFirst()) {
+            int user = cursor.getColumnIndex(POSTS_USER);
+            int text = cursor.getColumnIndex(POSTS_TEXT);
+            int imageUrl = cursor.getColumnIndex(POSTS_IMAGE);
+            int lastUpdate= cursor.getColumnIndex(LAST_UPDATE_DATE);
+            int id2=cursor.getColumnIndex(POSTS_ID);
+            int delete=cursor.getColumnIndex(POST_DELTE);
 
-        if(cursor.moveToFirst())
-            id3 = cursor.getInt(id2);
+                if(cursor.getInt(delete)!=1) {
+                    r.user = cursor.getString(user);
+                    r.id = cursor.getInt(id2);
+                    r.text = cursor.getString(text);
+                    r.isDeleted = false;
+                    r.imageUrl = cursor.getString(imageUrl);
+                    r.lastUpdateDate = cursor.getDouble(lastUpdate);
 
-        return id3;
+                }
+        }
+
+        return r;
     }
 
+
+    //Add new row to the SQL DB
     public static void addRow(SQLiteDatabase db, RowVew r)
     {
         Log.d("tag","second update");
@@ -128,7 +150,7 @@ public class RowSql {
             return false;
     }
 
-
+    //Edit/Change spacific row in the SQL DB
     public static void editRow(SQLiteDatabase db, RowVew r)
     {
         ContentValues values = new ContentValues();
@@ -146,6 +168,7 @@ public class RowSql {
         db.update(POSTS_TABLE,values,"id=?",new String[]{String.valueOf(r.id)});
     }
 
+    //When the user is deleting a post he just changes the value of "id_deleted" to be 1
     public static void deletePost(SQLiteDatabase db, RowVew r)
     {
         ContentValues values = new ContentValues();

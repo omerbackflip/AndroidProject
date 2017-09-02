@@ -153,7 +153,7 @@ public class listFragment extends Fragment {
         void onFragmentInteraction2(String id);
     }
     class StudentsListAdapter extends BaseAdapter {
-        LayoutInflater inflater = getActivity().getLayoutInflater();////check
+        LayoutInflater inflater = getActivity().getLayoutInflater();
 
         @Override
         public int getCount() {
