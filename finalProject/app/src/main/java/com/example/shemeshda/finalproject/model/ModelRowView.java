@@ -238,8 +238,6 @@ public class ModelRowView {
             Log.d("tag", "got image from cache: " + imageFileName);
         } catch (FileNotFoundException e) { // If the file not found
             e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
         }
         return bitmap;
     }
